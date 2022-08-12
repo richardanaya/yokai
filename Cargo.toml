@@ -1,8 +1,15 @@
 [package]
 name = "yokai"
-version = "0.1.0"
+version = "0.0.0"
 edition = "2021"
+authors = ["Richard Anaya"]
+description = "A japanese roguelike set in Heian era"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/richardanaya/yokai"
+readme="README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+crossterm = "0.25.0"
+kimono = "0.1.3"
