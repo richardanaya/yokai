@@ -9,5 +9,5 @@ A roguelike set in Heian era japan written in Rust using truecolor terminal capa
 
 ### Time/Weather/Energy lighting model
 
-There's a fairly deep system evolving around time of day, seasons, moons, kami events, energy imbalance, and eventually weather that's evolving with specific effect on ambient lighting.
+There's a fairly deep system evolving around time of day, seasons, moons, kami events, energy imbalance, and simulated weather that's evolving with specific effect on ambient lighting.
 
