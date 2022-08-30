@@ -15,6 +15,6 @@ There's a fairly deep system evolving around time of day, seasons, moons, kami e
 
 Every object has PBR material, emmision, size, height, and transparency that all effect the flow of light.
 
-## Double wide symbols and color variation
+### Double wide symbols and color variation
 
 Every entity in the game is represented by a double wide character to make use of unicode symbols and allow more lively variation of entities.
