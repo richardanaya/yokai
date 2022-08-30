@@ -27,35 +27,65 @@ fn main() -> crossterm::Result<()> {
                 let mut should_render = true;
                 match event {
                     KeyEvent {
-                        code: KeyCode::Char('q'),
+                        code: KeyCode::Esc,
                         modifiers: event::KeyModifiers::NONE,
                         kind: _,
                         state: _,
                     } => break,
                     KeyEvent {
-                        code: KeyCode::Left,
+                        code: KeyCode::Char('a'),
                         modifiers: event::KeyModifiers::NONE,
                         kind: _,
                         state: _,
                     } => map.move_player(-1, 0),
                     KeyEvent {
-                        code: KeyCode::Right,
+                        code: KeyCode::Char('d'),
                         modifiers: event::KeyModifiers::NONE,
                         kind: _,
                         state: _,
                     } => map.move_player(1, 0),
                     KeyEvent {
-                        code: KeyCode::Up,
+                        code: KeyCode::Char('w'),
                         modifiers: event::KeyModifiers::NONE,
                         kind: _,
                         state: _,
                     } => map.move_player(0, -1),
                     KeyEvent {
-                        code: KeyCode::Down,
+                        code: KeyCode::Char('s'),
                         modifiers: event::KeyModifiers::NONE,
                         kind: _,
                         state: _,
                     } => map.move_player(0, 1),
+                    KeyEvent {
+                        code: KeyCode::Char('q'),
+                        modifiers: event::KeyModifiers::NONE,
+                        kind: _,
+                        state: _,
+                    } => map.move_player(-1, -1),
+                    KeyEvent {
+                        code: KeyCode::Char('e'),
+                        modifiers: event::KeyModifiers::NONE,
+                        kind: _,
+                        state: _,
+                    } => map.move_player(1, -1),
+                    KeyEvent {
+                        code: KeyCode::Char('z'),
+                        modifiers: event::KeyModifiers::NONE,
+                        kind: _,
+                        state: _,
+                    } => map.move_player(-1, 1),
+                    KeyEvent {
+                        code: KeyCode::Char('c'),
+                        modifiers: event::KeyModifiers::NONE,
+                        kind: _,
+                        state: _,
+                    } => map.move_player(1, 1),
+                    KeyEvent {
+                        code: KeyCode::Char('x'),
+                        modifiers: event::KeyModifiers::NONE,
+                        kind: _,
+                        state: _,
+                    } => map.move_player(0, 0),
                     _ => {
                         should_render = false;
                     }
