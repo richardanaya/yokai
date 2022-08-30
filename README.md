@@ -11,3 +11,6 @@ A roguelike set in Heian era japan written in Rust using truecolor terminal capa
 
 There's a fairly deep system evolving around time of day, seasons, moons, kami events, energy imbalance, and simulated weather that's evolving with specific effect on ambient lighting.
 
+### Material lighting model
+
+Every object has PBR material, emmision, size, height, and transparency that all effect the flow of light.
