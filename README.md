@@ -17,4 +17,4 @@ Every object has PBR material, emmision, size, height, and transparency that all
 
 ### Double wide symbols and color variation
 
-Every entity in the game is represented by a double wide character to make use of unicode symbols and allow more lively variation of entities.
+Every entity in the game is represented by a double wide character to make use of unicode symbols and have color alternatives to allow more lively variation of entities.
