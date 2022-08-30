@@ -1,6 +1,25 @@
 use colored::Colorize;
 use rand::Rng;
 
+const TICKS_PER_DAY: usize = 120;
+const WITCHING_HOUR: usize = TICKS_PER_DAY / 6;
+const SUNRISE: usize = TICKS_PER_DAY / 4;
+const SUNSET: usize = TICKS_PER_DAY * 3 / 4;
+const TICKS_PER_HOUR: usize = TICKS_PER_DAY / 24;
+const DAYS_PER_MONTH: usize = 28;
+const DAYS_PER_YEAR: usize = DAYS_PER_MONTH * 12;
+
+enum Moonphases {
+    New,
+    WaxingCrescent,
+    FirstQuarter,
+    WaxingGibbous,
+    Full,
+    WaningGibbous,
+    LastQuarter,
+    WaningCrescent,
+}
+
 pub struct EntityName {
     pub english_name: &'static str,
     pub japanese_name: Option<&'static str>,
@@ -43,6 +62,8 @@ pub struct Player {
 }
 
 pub struct Map {
+    pub time_tick: usize,
+    pub day: usize,
     pub width: usize,
     pub height: usize,
     pub player: Player,
@@ -88,8 +109,10 @@ const LAND_DIRT: Land = Land {
 impl Map {
     pub fn new(size: (u16, u16)) -> Map {
         let width = (size.0 / 2) as usize;
-        let height = size.1 as usize;
+        let height = (size.1 - 1) as usize;
         Map {
+            day: 1,
+            time_tick: TICKS_PER_DAY,
             width,
             height,
             player: Player {
@@ -163,10 +186,75 @@ impl Map {
             return;
         }
         self.player.position = new_position;
+
+        if self.time_tick == TICKS_PER_DAY {
+            self.time_tick = 0;
+            self.day = (self.day + 1) % DAYS_PER_YEAR;
+        } else {
+            self.time_tick += 1;
+        }
     }
 
     pub fn render(&self, size: (u16, u16)) {
         let mut lines: Vec<String> = vec![];
+
+        let moon_day = self.day % DAYS_PER_MONTH;
+
+        let current_moon: Moonphases = match moon_day / 4 {
+            0 => Moonphases::New,
+            1 => Moonphases::WaxingCrescent,
+            2 => Moonphases::FirstQuarter,
+            3 => Moonphases::WaxingGibbous,
+            4 => Moonphases::Full,
+            5 => Moonphases::WaningGibbous,
+            6 => Moonphases::LastQuarter,
+            _ => Moonphases::WaningCrescent,
+        };
+
+        let moon_ambient_light_modifier = match current_moon {
+            Moonphases::New => 0.0,
+            Moonphases::WaxingCrescent => 0.025,
+            Moonphases::FirstQuarter => 0.05,
+            Moonphases::WaxingGibbous => 0.075,
+            Moonphases::Full => 0.1,
+            Moonphases::WaningGibbous => 0.075,
+            Moonphases::LastQuarter => 0.05,
+            Moonphases::WaningCrescent => 0.025,
+        };
+
+        let mut time_of_day;
+        let mut ambient_color: (f32, f32, f32) = if self.time_tick < WITCHING_HOUR {
+            time_of_day = "night";
+            (0.3, 0.3, 0.3)
+        } else if self.time_tick < WITCHING_HOUR + TICKS_PER_HOUR {
+            time_of_day = "witching hour";
+            (0.2, 0.2, 0.2)
+        } else if self.time_tick < SUNRISE {
+            time_of_day = "before sunrise";
+            (0.3, 0.3, 0.3)
+        } else if self.time_tick < SUNRISE + TICKS_PER_HOUR {
+            time_of_day = "sunrise";
+            (0.6, 0.6, 0.6)
+        } else if self.time_tick < SUNSET - TICKS_PER_HOUR {
+            time_of_day = "day";
+            (1.0, 1.0, 1.0)
+        } else if self.time_tick < SUNSET {
+            time_of_day = "sunset";
+            (0.6, 0.6, 0.6)
+        } else if self.time_tick < SUNSET + TICKS_PER_HOUR / 2 {
+            time_of_day = "twilight";
+            (0.5, 0.5, 0.5)
+        } else {
+            time_of_day = "night";
+            (0.3, 0.3, 0.3)
+        };
+
+        if self.time_tick < SUNRISE + TICKS_PER_HOUR || self.time_tick > SUNSET - TICKS_PER_HOUR {
+            ambient_color.0 += moon_ambient_light_modifier;
+            ambient_color.1 += moon_ambient_light_modifier;
+            ambient_color.2 += moon_ambient_light_modifier;
+        }
+
         for y in 0..self.height {
             let mut line = String::new();
             for x in 0..self.width {
@@ -175,18 +263,18 @@ impl Map {
                 let land = &self.lands[position.1 & self.width + position.0];
                 if is_player_position {
                     let true_color = self.player.entity.colors[1];
-                    let r = (true_color >> 16) as u8;
-                    let g = ((true_color >> 8) & 0xFF) as u8;
-                    let b = (true_color & 0xFF) as u8;
+                    let r = ((true_color >> 16) as u8 as f32 * ambient_color.0) as u8;
+                    let g = ((true_color >> 8) as u8 as f32 * ambient_color.1) as u8;
+                    let b = ((true_color) as u8 as f32 * ambient_color.2) as u8;
                     line.push_str(&format!(
                         "{}",
                         &(self.player.entity.symbols[0].to_string().truecolor(r, g, b))
                     ));
                 } else {
                     let true_color = land.template.entity.colors[land.color_index];
-                    let r = (true_color >> 16) as u8;
-                    let g = ((true_color >> 8) & 0xFF) as u8;
-                    let b = (true_color & 0xFF) as u8;
+                    let r = ((true_color >> 16) as u8 as f32 * ambient_color.0) as u8;
+                    let g = ((true_color >> 8) as u8 as f32 * ambient_color.1) as u8;
+                    let b = ((true_color) as u8 as f32 * ambient_color.2) as u8;
                     line.push_str(&format!(
                         "{}",
                         &(land.template.entity.symbols[land.symbol_index]
@@ -197,6 +285,23 @@ impl Map {
             }
             lines.push(line);
         }
+
+        let moon_name = match current_moon {
+            Moonphases::New => "New Moon",
+            Moonphases::WaxingCrescent => "Waxing Crescent",
+            Moonphases::FirstQuarter => "First Quarter",
+            Moonphases::WaxingGibbous => "Waxing Gibbous",
+            Moonphases::Full => "Full Moon",
+            Moonphases::WaningGibbous => "Waning Gibbous",
+            Moonphases::LastQuarter => "Last Quarter",
+            Moonphases::WaningCrescent => "Waning Crescent",
+        };
+
+        lines.push(format!(
+            "Time {} {} Day {} Moon {}",
+            self.time_tick, time_of_day, self.day, moon_name
+        ));
+
         // move terminal cursor to top left
         print!("{}", crossterm::cursor::MoveTo(0, 0));
         let all_lines = lines.join("\n\r");
