@@ -1,13 +1,14 @@
 use colored::Colorize;
 use rand::Rng;
 
-const TICKS_PER_DAY: usize = 120;
+const TICKS_PER_DAY: usize = 1200;
 const WITCHING_HOUR: usize = TICKS_PER_DAY / 6;
 const SUNRISE: usize = TICKS_PER_DAY / 4;
 const SUNSET: usize = TICKS_PER_DAY * 3 / 4;
 const TICKS_PER_HOUR: usize = TICKS_PER_DAY / 24;
 const DAYS_PER_MONTH: usize = 28;
 const DAYS_PER_YEAR: usize = DAYS_PER_MONTH * 12;
+const DAYS_PER_SEASON: usize = DAYS_PER_YEAR / 4;
 
 enum Moonphases {
     New,
@@ -18,6 +19,13 @@ enum Moonphases {
     WaningGibbous,
     LastQuarter,
     WaningCrescent,
+}
+
+enum Season {
+    Spring,
+    Summer,
+    Autumn,
+    Winter,
 }
 
 pub struct EntityName {
@@ -110,9 +118,11 @@ impl Map {
     pub fn new(size: (u16, u16)) -> Map {
         let width = (size.0 / 2) as usize;
         let height = (size.1 - 1) as usize;
+        let random_day = rand::thread_rng().gen_range(0..DAYS_PER_YEAR);
+        let random_time = rand::thread_rng().gen_range(0..TICKS_PER_DAY);
         Map {
-            day: 1,
-            time_tick: TICKS_PER_DAY,
+            day: random_day,
+            time_tick: random_time,
             width,
             height,
             player: Player {
@@ -211,6 +221,13 @@ impl Map {
             _ => Moonphases::WaningCrescent,
         };
 
+        let current_season = match self.day / DAYS_PER_SEASON {
+            0 => Season::Spring,
+            1 => Season::Summer,
+            2 => Season::Autumn,
+            _ => Season::Winter,
+        };
+
         let moon_ambient_light_modifier = match current_moon {
             Moonphases::New => 0.0,
             Moonphases::WaxingCrescent => 0.025,
@@ -220,6 +237,13 @@ impl Map {
             Moonphases::WaningGibbous => 0.075,
             Moonphases::LastQuarter => 0.05,
             Moonphases::WaningCrescent => 0.025,
+        };
+
+        let season_ambient_light_modifier = match current_season {
+            Season::Spring => (0.975, 1.0, 0.0),
+            Season::Summer => (1.0, 0.975, 0.975),
+            Season::Autumn => (1.0, 0.985, 0.957),
+            Season::Winter => (0.975, 0.975, 1.0),
         };
 
         let mut time_of_day;
@@ -248,6 +272,12 @@ impl Map {
             time_of_day = "night";
             (0.3, 0.3, 0.3)
         };
+
+        ambient_color = (
+            ambient_color.0 * season_ambient_light_modifier.0,
+            ambient_color.1 * season_ambient_light_modifier.1,
+            ambient_color.2 * season_ambient_light_modifier.2,
+        );
 
         if self.time_tick < SUNRISE + TICKS_PER_HOUR || self.time_tick > SUNSET - TICKS_PER_HOUR {
             ambient_color.0 += moon_ambient_light_modifier;
@@ -297,9 +327,16 @@ impl Map {
             Moonphases::WaningCrescent => "Waning Crescent",
         };
 
+        let season_name = match current_season {
+            Season::Spring => "Spring",
+            Season::Summer => "Summer",
+            Season::Autumn => "Autumn",
+            Season::Winter => "Winter",
+        };
+
         lines.push(format!(
-            "Time {} {} Day {} Moon {}",
-            self.time_tick, time_of_day, self.day, moon_name
+            "Time {} {} Day {} Moon {} Season {}",
+            self.time_tick, time_of_day, self.day, moon_name, season_name
         ));
 
         // move terminal cursor to top left
