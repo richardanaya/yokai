@@ -424,29 +424,24 @@ impl Map {
             map_lines.push(line);
         }
 
-        // Add combat message if any
-        if let Some(msg) = &self.combat_message {
-            map_lines.push(format!("\nCombat: {}", msg));
-        }
-
         // Add character stats
         stat_lines.push("╔═══════════════════╗".to_string());
         stat_lines.push("║  Character Sheet  ║".to_string());
         stat_lines.push("╠═══════════════════╣".to_string());
-        stat_lines.push(format!("║ Level: {:11} ║", self.player.level));
-        stat_lines.push(format!("║ EXP: {}/100      ║", self.player.exp));
+        stat_lines.push(format!("║ Level: {:<10} ║", self.player.level));
+        stat_lines.push(format!("║ EXP: {:<3}/100    ║", self.player.exp));
         stat_lines.push("╟───────────────────╢".to_string());
-        stat_lines.push(format!("║ HP: {:<4}/{:<7} ║", self.player.hp, self.player.max_hp));
-        stat_lines.push(format!("║ MP: {:<4}/{:<7} ║", self.player.mp, self.player.max_mp));
+        stat_lines.push(format!("║ HP: {:<3}/{:<6} ║", self.player.hp, self.player.max_hp));
+        stat_lines.push(format!("║ MP: {:<3}/{:<6} ║", self.player.mp, self.player.max_mp));
         stat_lines.push("╟───────────────────╢".to_string());
         stat_lines.push("║      Stats        ║".to_string());
         stat_lines.push("╟───────────────────╢".to_string());
-        stat_lines.push(format!("║ STR: {:11} ║", self.player.strength));
-        stat_lines.push(format!("║ DEX: {:11} ║", self.player.dexterity));
-        stat_lines.push(format!("║ CON: {:11} ║", self.player.constitution));
-        stat_lines.push(format!("║ INT: {:11} ║", self.player.intelligence));
-        stat_lines.push(format!("║ WIS: {:11} ║", self.player.wisdom));
-        stat_lines.push(format!("║ CHA: {:11} ║", self.player.charisma));
+        stat_lines.push(format!("║ STR: {:<10} ║", self.player.strength));
+        stat_lines.push(format!("║ DEX: {:<10} ║", self.player.dexterity));
+        stat_lines.push(format!("║ CON: {:<10} ║", self.player.constitution));
+        stat_lines.push(format!("║ INT: {:<10} ║", self.player.intelligence));
+        stat_lines.push(format!("║ WIS: {:<10} ║", self.player.wisdom));
+        stat_lines.push(format!("║ CHA: {:<10} ║", self.player.charisma));
 
         let moon_name = match current_moon {
             Moonphases::New => "New Moon",
@@ -483,6 +478,13 @@ impl Map {
         print!("{}", crossterm::cursor::MoveTo(0, 0));
         for line in map_lines {
             print!("{}\n\r", line);
+        }
+
+        // Then overlay the combat message if any
+        if let Some(msg) = &self.combat_message {
+            print!("{}{}", 
+                crossterm::cursor::MoveTo(0, (self.height + 1) as u16),
+                format!("Combat: {}", msg));
         }
 
         // Then overlay the stats if enabled
