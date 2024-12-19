@@ -1,6 +1,10 @@
 use crossterm::event::{Event, KeyCode, KeyEvent};
 use crossterm::{cursor, event, terminal};
 use std::time::Duration;
+use std::thread;
+use std::fs::File;
+use std::io::BufReader;
+use rodio::{Decoder, OutputStream, Sink};
 
 struct CleanUp;
 
@@ -16,6 +20,18 @@ impl Drop for CleanUp {
 }
 
 fn main() -> crossterm::Result<()> {
+    // Start background music in a separate thread
+    thread::spawn(|| {
+        let (_stream, stream_handle) = OutputStream::try_default().unwrap();
+        let sink = Sink::try_new(&stream_handle).unwrap();
+        
+        let file = BufReader::new(File::open("src/soundtrack_1.mp3").unwrap());
+        let source = Decoder::new(file).unwrap();
+        sink.append(source);
+        sink.set_volume(0.5); // 50% volume
+        sink.sleep_until_end();
+    });
+
     let mut map = Map::new(terminal::size().expect("Could not get terminal size"));
     let _clean_up = CleanUp;
     terminal::enable_raw_mode()?;
