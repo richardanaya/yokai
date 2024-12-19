@@ -135,7 +135,9 @@ const LAND_DIRT: Land = Land {
 
 impl Map {
     fn pad_stat(value: impl std::fmt::Display, width: usize) -> String {
-        format!("{:>width$}", value, width=width)
+        let value_str = value.to_string();
+        let padding_needed = width.saturating_sub(value_str.len());
+        " ".repeat(padding_needed) + &value_str
     }
 
     pub fn new(size: (u16, u16)) -> Map {
