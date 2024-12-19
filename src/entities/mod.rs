@@ -181,28 +181,26 @@ impl Map {
                 charisma: 10,
             },
             items: vec![],
-            monsters: vec![
-                Monster {
-                    entity: Entity {
-                        name: EntityName {
-                            english_name: "Goblin",
-                            japanese_name: Some("ゴブリン"),
-                            discovered: true,
-                            use_japanese: true,
-                        },
-                        description: "A nasty goblin",
-                        symbols: ["G ", "g ", "G!"],
-                        colors: [0x00FF00, 0x32CD32, 0x228B22],
-                        opacity: 255,
-                        visibly_blocking: true,
+            monsters: vec![Monster {
+                entity: Entity {
+                    name: EntityName {
+                        english_name: "Goblin",
+                        japanese_name: Some("ゴブリン"),
+                        discovered: true,
+                        use_japanese: true,
                     },
-                    position: (width / 2 + 3, height / 2), // Place near player
-                    hp: 10,
-                    max_hp: 10,
-                    strength: 3,
-                    is_alive: true,
-                }
-            ],
+                    description: "A nasty goblin",
+                    symbols: ["G ", "g ", "G!"],
+                    colors: [0x00FF00, 0x32CD32, 0x228B22],
+                    opacity: 255,
+                    visibly_blocking: true,
+                },
+                position: (width / 2 + 3, height / 2), // Place near player
+                hp: 10,
+                max_hp: 10,
+                strength: 3,
+                is_alive: true,
+            }],
             lands: {
                 let size = (width * height) as usize;
                 let mut zero_vec: Vec<LandInstance> = Vec::with_capacity(size as usize);
@@ -250,7 +248,10 @@ impl Map {
         }
         let new_position: (usize, usize) = (new_x as usize, new_y as usize);
         // Check for blocking terrain
-        if self.lands[new_position.1 * self.width + new_position.0].template.blocking {
+        if self.lands[new_position.1 * self.width + new_position.0]
+            .template
+            .blocking
+        {
             return;
         }
 
@@ -260,13 +261,15 @@ impl Map {
                 // Combat!
                 let player_damage = self.player.strength / 2 + rand::thread_rng().gen_range(1..4);
                 monster.hp = monster.hp.saturating_sub(player_damage);
-                
+
                 if monster.hp == 0 {
                     monster.is_alive = false;
                     self.player.exp += 10;
-                    self.combat_message = Some(format!("You hit {} for {} damage and defeated it! (+10 exp)", 
-                        monster.entity.name.english_name, player_damage));
-                    
+                    self.combat_message = Some(format!(
+                        "You hit {} for {} damage and defeated it! (+10 exp)",
+                        monster.entity.name.english_name, player_damage
+                    ));
+
                     // Level up at 100 exp
                     if self.player.exp >= 100 {
                         self.player.level += 1;
@@ -274,14 +277,17 @@ impl Map {
                         self.player.max_hp += 5;
                         self.player.hp = self.player.max_hp;
                         self.player.strength += 2;
-                        self.combat_message = Some(format!("Level Up! You are now level {}", self.player.level));
+                        self.combat_message =
+                            Some(format!("Level Up! You are now level {}", self.player.level));
                     }
                 } else {
                     // Monster counterattack
                     let monster_damage = monster.strength + rand::thread_rng().gen_range(0..2);
                     self.player.hp = self.player.hp.saturating_sub(monster_damage);
-                    self.combat_message = Some(format!("You hit {} for {} damage. It hits back for {} damage!", 
-                        monster.entity.name.english_name, player_damage, monster_damage));
+                    self.combat_message = Some(format!(
+                        "You hit {} for {} damage. It hits back for {} damage!",
+                        monster.entity.name.english_name, player_damage, monster_damage
+                    ));
                 }
                 return;
             }
@@ -434,24 +440,52 @@ impl Map {
         stat_lines.push("╔═══════════════════╗".to_string());
         stat_lines.push("║  Character Sheet  ║".to_string());
         stat_lines.push("╠═══════════════════╣".to_string());
-        stat_lines.push(format!("║ Level: {}        ║", Self::pad_stat(self.player.level, 3)));
-        stat_lines.push(format!("║ EXP: {}/100     ║", Self::pad_stat(self.player.exp, 3)));
+        stat_lines.push(format!(
+            "║ Level: {}        ║",
+            Self::pad_stat(self.player.level, 3)
+        ));
+        stat_lines.push(format!(
+            "║ EXP: {}/100      ║",
+            Self::pad_stat(self.player.exp, 3)
+        ));
         stat_lines.push("╟───────────────────╢".to_string());
-        stat_lines.push(format!("║ HP: {}/{}      ║", 
+        stat_lines.push(format!(
+            "║ HP: {}/{}       ║",
             Self::pad_stat(self.player.hp, 3),
-            Self::pad_stat(self.player.max_hp, 3)));
-        stat_lines.push(format!("║ MP: {}/{}      ║",
+            Self::pad_stat(self.player.max_hp, 3)
+        ));
+        stat_lines.push(format!(
+            "║ MP: {}/{}       ║",
             Self::pad_stat(self.player.mp, 3),
-            Self::pad_stat(self.player.max_mp, 3)));
+            Self::pad_stat(self.player.max_mp, 3)
+        ));
         stat_lines.push("╟───────────────────╢".to_string());
         stat_lines.push("║      Stats        ║".to_string());
         stat_lines.push("╟───────────────────╢".to_string());
-        stat_lines.push(format!("║ STR: {}         ║", Self::pad_stat(self.player.strength, 3)));
-        stat_lines.push(format!("║ DEX: {}         ║", Self::pad_stat(self.player.dexterity, 3)));
-        stat_lines.push(format!("║ CON: {}         ║", Self::pad_stat(self.player.constitution, 3)));
-        stat_lines.push(format!("║ INT: {}         ║", Self::pad_stat(self.player.intelligence, 3)));
-        stat_lines.push(format!("║ WIS: {}         ║", Self::pad_stat(self.player.wisdom, 3)));
-        stat_lines.push(format!("║ CHA: {}         ║", Self::pad_stat(self.player.charisma, 3)));
+        stat_lines.push(format!(
+            "║ STR: {}          ║",
+            Self::pad_stat(self.player.strength, 3)
+        ));
+        stat_lines.push(format!(
+            "║ DEX: {}          ║",
+            Self::pad_stat(self.player.dexterity, 3)
+        ));
+        stat_lines.push(format!(
+            "║ CON: {}          ║",
+            Self::pad_stat(self.player.constitution, 3)
+        ));
+        stat_lines.push(format!(
+            "║ INT: {}          ║",
+            Self::pad_stat(self.player.intelligence, 3)
+        ));
+        stat_lines.push(format!(
+            "║ WIS: {}          ║",
+            Self::pad_stat(self.player.wisdom, 3)
+        ));
+        stat_lines.push(format!(
+            "║ CHA: {}          ║",
+            Self::pad_stat(self.player.charisma, 3)
+        ));
 
         let moon_name = match current_moon {
             Moonphases::New => "New Moon",
@@ -475,11 +509,11 @@ impl Map {
         stat_lines.push("╟───────────────────╢".to_string());
         stat_lines.push("║    Environment    ║".to_string());
         stat_lines.push("╟───────────────────╢".to_string());
-        stat_lines.push(format!("║ Time: {:10} ║", self.time_tick));
-        stat_lines.push(format!("║ Period: {:8} ║", time_of_day));
-        stat_lines.push(format!("║ Day: {:11} ║", self.day));
-        stat_lines.push(format!("║ Moon: {:10} ║", moon_name));
-        stat_lines.push(format!("║ Season: {:8} ║", season_name));
+        stat_lines.push(format!("║ Time: {:10}  ║", self.time_tick));
+        stat_lines.push(format!("║ Period: {:8}  ║", time_of_day));
+        stat_lines.push(format!("║ Day: {:11}  ║", self.day));
+        stat_lines.push(format!("║ Moon: {:10}  ║", moon_name));
+        stat_lines.push(format!("║ Season: {:8}  ║", season_name));
         stat_lines.push("╚═══════════════════╝".to_string());
 
         // move terminal cursor to top left
@@ -492,16 +526,22 @@ impl Map {
 
         // Then overlay the combat message if any
         if let Some(msg) = &self.combat_message {
-            print!("{}{}", 
+            print!(
+                "{}{}",
                 crossterm::cursor::MoveTo(0, (self.height + 1) as u16),
-                format!("Combat: {}", msg));
+                format!("Combat: {}", msg)
+            );
         }
 
         // Then overlay the stats if enabled
         if self.show_stats {
             let stats_x = 3; // Offset from left edge
             for (i, stat_line) in stat_lines.iter().enumerate() {
-                print!("{}{}", crossterm::cursor::MoveTo(stats_x, i as u16), stat_line);
+                print!(
+                    "{}{}",
+                    crossterm::cursor::MoveTo(stats_x, i as u16),
+                    stat_line
+                );
             }
         }
     }
