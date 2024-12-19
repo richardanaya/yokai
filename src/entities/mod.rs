@@ -96,6 +96,7 @@ pub struct Map {
     pub monsters: Vec<Monster>,
     pub lands: Vec<LandInstance>,
     pub combat_message: Option<String>,
+    pub show_stats: bool,
 }
 
 const LAND_TREE: Land = Land {
@@ -144,6 +145,7 @@ impl Map {
             width,
             height,
             combat_message: None,
+            show_stats: true,
             player: Player {
                 entity: Entity {
                     name: EntityName {
@@ -479,7 +481,7 @@ impl Map {
         print!("{}", crossterm::cursor::MoveTo(0, 0));
         for i in 0..map_lines.len() {
             print!("{}", map_lines[i]);
-            if i < stat_lines.len() {
+            if self.show_stats && i < stat_lines.len() {
                 print!("  │  {}", stat_lines[i]);
             }
             print!("\n\r");

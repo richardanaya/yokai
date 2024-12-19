@@ -81,6 +81,14 @@ fn main() -> crossterm::Result<()> {
                         state: _,
                     } => map.move_player(1, 1),
                     KeyEvent {
+                        code: KeyCode::Char('C'),
+                        modifiers: event::KeyModifiers::NONE,
+                        kind: _,
+                        state: _,
+                    } => {
+                        map.show_stats = !map.show_stats;
+                    },
+                    KeyEvent {
                         code: KeyCode::Char('x'),
                         modifiers: event::KeyModifiers::NONE,
                         kind: _,
