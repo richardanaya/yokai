@@ -95,6 +95,7 @@ pub struct Map {
     pub items: Vec<Item>,
     pub monsters: Vec<Monster>,
     pub lands: Vec<LandInstance>,
+    pub combat_message: Option<String>,
 }
 
 const LAND_TREE: Land = Land {
@@ -142,6 +143,7 @@ impl Map {
             time_tick: random_time,
             width,
             height,
+            combat_message: None,
             player: Player {
                 entity: Entity {
                     name: EntityName {
@@ -254,6 +256,9 @@ impl Map {
                 if monster.hp == 0 {
                     monster.is_alive = false;
                     self.player.exp += 10;
+                    self.combat_message = Some(format!("You hit {} for {} damage and defeated it! (+10 exp)", 
+                        monster.entity.name.english_name, player_damage));
+                    
                     // Level up at 100 exp
                     if self.player.exp >= 100 {
                         self.player.level += 1;
@@ -261,11 +266,14 @@ impl Map {
                         self.player.max_hp += 5;
                         self.player.hp = self.player.max_hp;
                         self.player.strength += 2;
+                        self.combat_message = Some(format!("Level Up! You are now level {}", self.player.level));
                     }
                 } else {
                     // Monster counterattack
                     let monster_damage = monster.strength + rand::thread_rng().gen_range(0..2);
                     self.player.hp = self.player.hp.saturating_sub(monster_damage);
+                    self.combat_message = Some(format!("You hit {} for {} damage. It hits back for {} damage!", 
+                        monster.entity.name.english_name, player_damage, monster_damage));
                 }
                 return;
             }
@@ -412,6 +420,11 @@ impl Map {
                 }
             }
             map_lines.push(line);
+        }
+
+        // Add combat message if any
+        if let Some(msg) = &self.combat_message {
+            map_lines.push(format!("\nCombat: {}", msg));
         }
 
         // Add character stats
