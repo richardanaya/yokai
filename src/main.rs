@@ -88,7 +88,7 @@ fn main() -> crossterm::Result<()> {
                     } => {
                         map.show_stats = !map.show_stats;
                         map.render(terminal::size().expect("Could not get terminal size"));
-                    },
+                    }
                     KeyEvent {
                         code: KeyCode::Char('x'),
                         modifiers: event::KeyModifiers::NONE,
