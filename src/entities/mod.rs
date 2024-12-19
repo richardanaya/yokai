@@ -151,7 +151,7 @@ impl Map {
                     opacity: 255,
                     visibly_blocking: true,
                 },
-                position: (0, 0),
+                position: (width / 2, height / 2), // Start in center
                 level: 1,
                 exp: 0,
                 hp: 20,
@@ -213,7 +213,7 @@ impl Map {
             new_y = self.height as i32 - 1;
         }
         let new_position: (usize, usize) = (new_x as usize, new_y as usize);
-        if self.lands[new_position.1 & self.width + new_position.0]
+        if self.lands[new_position.1 * self.width + new_position.0]
             .template
             .blocking
         {
@@ -315,7 +315,7 @@ impl Map {
             for x in 0..self.width {
                 let position = (x, y);
                 let is_player_position = position == self.player.position;
-                let land = &self.lands[position.1 & self.width + position.0];
+                let land = &self.lands[position.1 * self.width + position.0];
                 if is_player_position {
                     let true_color = self.player.entity.colors[1];
                     let r = ((true_color >> 16) as u8 as f32 * ambient_color.0) as u8;
