@@ -338,8 +338,26 @@ impl Map {
                     ));
                 }
             }
-            lines.push(line);
+            map_lines.push(line);
         }
+
+        // Add character stats
+        stat_lines.push("Character Sheet".to_string());
+        stat_lines.push("═══════════════".to_string());
+        stat_lines.push(format!("Level: {}", self.player.level));
+        stat_lines.push(format!("EXP: {}", self.player.exp));
+        stat_lines.push("".to_string());
+        stat_lines.push(format!("HP: {}/{}", self.player.hp, self.player.max_hp));
+        stat_lines.push(format!("MP: {}/{}", self.player.mp, self.player.max_mp));
+        stat_lines.push("".to_string());
+        stat_lines.push("Stats".to_string());
+        stat_lines.push("─────".to_string());
+        stat_lines.push(format!("STR: {}", self.player.strength));
+        stat_lines.push(format!("DEX: {}", self.player.dexterity));
+        stat_lines.push(format!("CON: {}", self.player.constitution));
+        stat_lines.push(format!("INT: {}", self.player.intelligence));
+        stat_lines.push(format!("WIS: {}", self.player.wisdom));
+        stat_lines.push(format!("CHA: {}", self.player.charisma));
 
         let moon_name = match current_moon {
             Moonphases::New => "New Moon",
