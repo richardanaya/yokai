@@ -430,22 +430,23 @@ impl Map {
         }
 
         // Add character stats
-        stat_lines.push("Character Sheet".to_string());
-        stat_lines.push("═══════════════".to_string());
-        stat_lines.push(format!("Level: {}", self.player.level));
-        stat_lines.push(format!("EXP: {}", self.player.exp));
-        stat_lines.push("".to_string());
-        stat_lines.push(format!("HP: {}/{}", self.player.hp, self.player.max_hp));
-        stat_lines.push(format!("MP: {}/{}", self.player.mp, self.player.max_mp));
-        stat_lines.push("".to_string());
-        stat_lines.push("Stats".to_string());
-        stat_lines.push("─────".to_string());
-        stat_lines.push(format!("STR: {}", self.player.strength));
-        stat_lines.push(format!("DEX: {}", self.player.dexterity));
-        stat_lines.push(format!("CON: {}", self.player.constitution));
-        stat_lines.push(format!("INT: {}", self.player.intelligence));
-        stat_lines.push(format!("WIS: {}", self.player.wisdom));
-        stat_lines.push(format!("CHA: {}", self.player.charisma));
+        stat_lines.push("╔═══════════════════╗".to_string());
+        stat_lines.push("║  Character Sheet  ║".to_string());
+        stat_lines.push("╠═══════════════════╣".to_string());
+        stat_lines.push(format!("║ Level: {:11} ║", self.player.level));
+        stat_lines.push(format!("║ EXP: {}/100      ║", self.player.exp));
+        stat_lines.push("╟───────────────────╢".to_string());
+        stat_lines.push(format!("║ HP: {:<4}/{:<7} ║", self.player.hp, self.player.max_hp));
+        stat_lines.push(format!("║ MP: {:<4}/{:<7} ║", self.player.mp, self.player.max_mp));
+        stat_lines.push("╟───────────────────╢".to_string());
+        stat_lines.push("║      Stats        ║".to_string());
+        stat_lines.push("╟───────────────────╢".to_string());
+        stat_lines.push(format!("║ STR: {:11} ║", self.player.strength));
+        stat_lines.push(format!("║ DEX: {:11} ║", self.player.dexterity));
+        stat_lines.push(format!("║ CON: {:11} ║", self.player.constitution));
+        stat_lines.push(format!("║ INT: {:11} ║", self.player.intelligence));
+        stat_lines.push(format!("║ WIS: {:11} ║", self.player.wisdom));
+        stat_lines.push(format!("║ CHA: {:11} ║", self.player.charisma));
 
         let moon_name = match current_moon {
             Moonphases::New => "New Moon",
@@ -466,14 +467,15 @@ impl Map {
         };
 
         // Add time and environmental information to stat lines
-        stat_lines.push("".to_string());
-        stat_lines.push("Environment".to_string());
-        stat_lines.push("───────────".to_string());
-        stat_lines.push(format!("Time: {}", self.time_tick));
-        stat_lines.push(format!("Period: {}", time_of_day));
-        stat_lines.push(format!("Day: {}", self.day));
-        stat_lines.push(format!("Moon: {}", moon_name));
-        stat_lines.push(format!("Season: {}", season_name));
+        stat_lines.push("╟───────────────────╢".to_string());
+        stat_lines.push("║    Environment    ║".to_string());
+        stat_lines.push("╟───────────────────╢".to_string());
+        stat_lines.push(format!("║ Time: {:10} ║", self.time_tick));
+        stat_lines.push(format!("║ Period: {:8} ║", time_of_day));
+        stat_lines.push(format!("║ Day: {:11} ║", self.day));
+        stat_lines.push(format!("║ Moon: {:10} ║", moon_name));
+        stat_lines.push(format!("║ Season: {:8} ║", season_name));
+        stat_lines.push("╚═══════════════════╝".to_string());
 
         // move terminal cursor to top left
         print!("{}", crossterm::cursor::MoveTo(0, 0));
