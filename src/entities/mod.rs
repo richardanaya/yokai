@@ -434,24 +434,24 @@ impl Map {
         stat_lines.push("╔═══════════════════╗".to_string());
         stat_lines.push("║  Character Sheet  ║".to_string());
         stat_lines.push("╠═══════════════════╣".to_string());
-        stat_lines.push(format!("║ Level: {}       ║", Self::pad_stat(self.player.level, 3)));
-        stat_lines.push(format!("║ EXP: {}/100    ║", Self::pad_stat(self.player.exp, 3)));
+        stat_lines.push(format!("║ Level: {}        ║", Self::pad_stat(self.player.level, 3)));
+        stat_lines.push(format!("║ EXP: {}/100     ║", Self::pad_stat(self.player.exp, 3)));
         stat_lines.push("╟───────────────────╢".to_string());
-        stat_lines.push(format!("║ HP: {}/{}     ║", 
+        stat_lines.push(format!("║ HP: {}/{}      ║", 
             Self::pad_stat(self.player.hp, 3),
             Self::pad_stat(self.player.max_hp, 3)));
-        stat_lines.push(format!("║ MP: {}/{}     ║",
+        stat_lines.push(format!("║ MP: {}/{}      ║",
             Self::pad_stat(self.player.mp, 3),
             Self::pad_stat(self.player.max_mp, 3)));
         stat_lines.push("╟───────────────────╢".to_string());
         stat_lines.push("║      Stats        ║".to_string());
         stat_lines.push("╟───────────────────╢".to_string());
-        stat_lines.push(format!("║ STR: {}        ║", Self::pad_stat(self.player.strength, 3)));
-        stat_lines.push(format!("║ DEX: {}        ║", Self::pad_stat(self.player.dexterity, 3)));
-        stat_lines.push(format!("║ CON: {}        ║", Self::pad_stat(self.player.constitution, 3)));
-        stat_lines.push(format!("║ INT: {}        ║", Self::pad_stat(self.player.intelligence, 3)));
-        stat_lines.push(format!("║ WIS: {}        ║", Self::pad_stat(self.player.wisdom, 3)));
-        stat_lines.push(format!("║ CHA: {}        ║", Self::pad_stat(self.player.charisma, 3)));
+        stat_lines.push(format!("║ STR: {}         ║", Self::pad_stat(self.player.strength, 3)));
+        stat_lines.push(format!("║ DEX: {}         ║", Self::pad_stat(self.player.dexterity, 3)));
+        stat_lines.push(format!("║ CON: {}         ║", Self::pad_stat(self.player.constitution, 3)));
+        stat_lines.push(format!("║ INT: {}         ║", Self::pad_stat(self.player.intelligence, 3)));
+        stat_lines.push(format!("║ WIS: {}         ║", Self::pad_stat(self.player.wisdom, 3)));
+        stat_lines.push(format!("║ CHA: {}         ║", Self::pad_stat(self.player.charisma, 3)));
 
         let moon_name = match current_moon {
             Moonphases::New => "New Moon",
