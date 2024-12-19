@@ -377,10 +377,15 @@ impl Map {
             Season::Winter => "Winter",
         };
 
-        lines.push(format!(
-            "Time {} {} Day {} Moon {} Season {}",
-            self.time_tick, time_of_day, self.day, moon_name, season_name
-        ));
+        // Add time and environmental information to stat lines
+        stat_lines.push("".to_string());
+        stat_lines.push("Environment".to_string());
+        stat_lines.push("───────────".to_string());
+        stat_lines.push(format!("Time: {}", self.time_tick));
+        stat_lines.push(format!("Period: {}", time_of_day));
+        stat_lines.push(format!("Day: {}", self.day));
+        stat_lines.push(format!("Moon: {}", moon_name));
+        stat_lines.push(format!("Season: {}", season_name));
 
         // move terminal cursor to top left
         print!("{}", crossterm::cursor::MoveTo(0, 0));
