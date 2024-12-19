@@ -479,14 +479,18 @@ impl Map {
 
         // move terminal cursor to top left
         print!("{}", crossterm::cursor::MoveTo(0, 0));
-        // Print map and stats side by side
+        // First print the map
         print!("{}", crossterm::cursor::MoveTo(0, 0));
-        for i in 0..map_lines.len() {
-            print!("{}", map_lines[i]);
-            if self.show_stats && i < stat_lines.len() {
-                print!("  │  {}", stat_lines[i]);
+        for line in map_lines {
+            print!("{}\n\r", line);
+        }
+
+        // Then overlay the stats if enabled
+        if self.show_stats {
+            let stats_x = 3; // Offset from left edge
+            for (i, stat_line) in stat_lines.iter().enumerate() {
+                print!("{}{}", crossterm::cursor::MoveTo(stats_x, i as u16), stat_line);
             }
-            print!("\n\r");
         }
     }
 }
