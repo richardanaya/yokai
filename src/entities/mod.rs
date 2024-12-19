@@ -428,20 +428,20 @@ impl Map {
         stat_lines.push("╔═══════════════════╗".to_string());
         stat_lines.push("║  Character Sheet  ║".to_string());
         stat_lines.push("╠═══════════════════╣".to_string());
-        stat_lines.push(format!("║ Level: {:<10} ║", self.player.level));
-        stat_lines.push(format!("║ EXP: {:<3}/100    ║", self.player.exp));
+        stat_lines.push(format!("║ Level: {:>3}       ║", self.player.level));
+        stat_lines.push(format!("║ EXP: {:>3}/100    ║", self.player.exp));
         stat_lines.push("╟───────────────────╢".to_string());
-        stat_lines.push(format!("║ HP: {:<3}/{:<6} ║", self.player.hp, self.player.max_hp));
-        stat_lines.push(format!("║ MP: {:<3}/{:<6} ║", self.player.mp, self.player.max_mp));
+        stat_lines.push(format!("║ HP: {:>3}/{:<3}     ║", self.player.hp, self.player.max_hp));
+        stat_lines.push(format!("║ MP: {:>3}/{:<3}     ║", self.player.mp, self.player.max_mp));
         stat_lines.push("╟───────────────────╢".to_string());
         stat_lines.push("║      Stats        ║".to_string());
         stat_lines.push("╟───────────────────╢".to_string());
-        stat_lines.push(format!("║ STR: {:<10} ║", self.player.strength));
-        stat_lines.push(format!("║ DEX: {:<10} ║", self.player.dexterity));
-        stat_lines.push(format!("║ CON: {:<10} ║", self.player.constitution));
-        stat_lines.push(format!("║ INT: {:<10} ║", self.player.intelligence));
-        stat_lines.push(format!("║ WIS: {:<10} ║", self.player.wisdom));
-        stat_lines.push(format!("║ CHA: {:<10} ║", self.player.charisma));
+        stat_lines.push(format!("║ STR: {:>3}        ║", self.player.strength));
+        stat_lines.push(format!("║ DEX: {:>3}        ║", self.player.dexterity));
+        stat_lines.push(format!("║ CON: {:>3}        ║", self.player.constitution));
+        stat_lines.push(format!("║ INT: {:>3}        ║", self.player.intelligence));
+        stat_lines.push(format!("║ WIS: {:>3}        ║", self.player.wisdom));
+        stat_lines.push(format!("║ CHA: {:>3}        ║", self.player.charisma));
 
         let moon_name = match current_moon {
             Moonphases::New => "New Moon",
