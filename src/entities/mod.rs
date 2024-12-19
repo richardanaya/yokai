@@ -535,7 +535,7 @@ impl Map {
 
         // Then overlay the stats if enabled
         if self.show_stats {
-            let stats_x = 3; // Offset from left edge
+            let stats_x = 0; // Offset from left edge
             for (i, stat_line) in stat_lines.iter().enumerate() {
                 print!(
                     "{}{}",
