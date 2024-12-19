@@ -67,6 +67,18 @@ pub struct LandInstance {
 pub struct Player {
     pub entity: Entity,
     pub position: (usize, usize),
+    pub level: u32,
+    pub exp: u32,
+    pub hp: u32,
+    pub max_hp: u32,
+    pub mp: u32,
+    pub max_mp: u32,
+    pub strength: u32,
+    pub dexterity: u32,
+    pub constitution: u32,
+    pub intelligence: u32,
+    pub wisdom: u32,
+    pub charisma: u32,
 }
 
 pub struct Map {
@@ -140,6 +152,18 @@ impl Map {
                     visibly_blocking: true,
                 },
                 position: (0, 0),
+                level: 1,
+                exp: 0,
+                hp: 20,
+                max_hp: 20,
+                mp: 10,
+                max_mp: 10,
+                strength: 10,
+                dexterity: 10,
+                constitution: 10,
+                intelligence: 10,
+                wisdom: 10,
+                charisma: 10,
             },
             items: vec![],
             monsters: vec![],
@@ -206,7 +230,8 @@ impl Map {
     }
 
     pub fn render(&self, size: (u16, u16)) {
-        let mut lines: Vec<String> = vec![];
+        let mut map_lines: Vec<String> = vec![];
+        let mut stat_lines: Vec<String> = vec![];
 
         let moon_day = self.day % DAYS_PER_MONTH;
 
@@ -341,7 +366,14 @@ impl Map {
 
         // move terminal cursor to top left
         print!("{}", crossterm::cursor::MoveTo(0, 0));
-        let all_lines = lines.join("\n\r");
-        print!("{}", all_lines);
+        // Print map and stats side by side
+        print!("{}", crossterm::cursor::MoveTo(0, 0));
+        for i in 0..map_lines.len() {
+            print!("{}", map_lines[i]);
+            if i < stat_lines.len() {
+                print!("  │  {}", stat_lines[i]);
+            }
+            print!("\n\r");
+        }
     }
 }
