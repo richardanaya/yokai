@@ -145,7 +145,7 @@ impl Map {
             width,
             height,
             combat_message: None,
-            show_stats: true,
+            show_stats: false,
             player: Player {
                 entity: Entity {
                     name: EntityName {
