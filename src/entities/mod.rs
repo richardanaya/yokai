@@ -46,6 +46,11 @@ pub struct Entity {
 
 pub struct Monster {
     pub entity: Entity,
+    pub position: (usize, usize),
+    pub hp: u32,
+    pub max_hp: u32,
+    pub strength: u32,
+    pub is_alive: bool,
 }
 
 pub struct Item {
@@ -166,7 +171,28 @@ impl Map {
                 charisma: 10,
             },
             items: vec![],
-            monsters: vec![],
+            monsters: vec![
+                Monster {
+                    entity: Entity {
+                        name: EntityName {
+                            english_name: "Goblin",
+                            japanese_name: Some("ゴブリン"),
+                            discovered: true,
+                            use_japanese: true,
+                        },
+                        description: "A nasty goblin",
+                        symbols: ["G ", "g ", "G!"],
+                        colors: [0x00FF00, 0x32CD32, 0x228B22],
+                        opacity: 255,
+                        visibly_blocking: true,
+                    },
+                    position: (width / 2 + 3, height / 2), // Place near player
+                    hp: 10,
+                    max_hp: 10,
+                    strength: 3,
+                    is_alive: true,
+                }
+            ],
             lands: {
                 let size = (width * height) as usize;
                 let mut zero_vec: Vec<LandInstance> = Vec::with_capacity(size as usize);
@@ -213,12 +239,38 @@ impl Map {
             new_y = self.height as i32 - 1;
         }
         let new_position: (usize, usize) = (new_x as usize, new_y as usize);
-        if self.lands[new_position.1 * self.width + new_position.0]
-            .template
-            .blocking
-        {
+        // Check for blocking terrain
+        if self.lands[new_position.1 * self.width + new_position.0].template.blocking {
             return;
         }
+
+        // Check for monster collision
+        for monster in &mut self.monsters {
+            if monster.position == new_position && monster.is_alive {
+                // Combat!
+                let player_damage = self.player.strength / 2 + rand::thread_rng().gen_range(1..4);
+                monster.hp = monster.hp.saturating_sub(player_damage);
+                
+                if monster.hp == 0 {
+                    monster.is_alive = false;
+                    self.player.exp += 10;
+                    // Level up at 100 exp
+                    if self.player.exp >= 100 {
+                        self.player.level += 1;
+                        self.player.exp = 0;
+                        self.player.max_hp += 5;
+                        self.player.hp = self.player.max_hp;
+                        self.player.strength += 2;
+                    }
+                } else {
+                    // Monster counterattack
+                    let monster_damage = monster.strength + rand::thread_rng().gen_range(0..2);
+                    self.player.hp = self.player.hp.saturating_sub(monster_damage);
+                }
+                return;
+            }
+        }
+
         self.player.position = new_position;
 
         if self.time_tick == TICKS_PER_DAY {
@@ -314,6 +366,27 @@ impl Map {
             let mut line = String::new();
             for x in 0..self.width {
                 let position = (x, y);
+                // Check for monsters first
+                let mut is_monster = false;
+                for monster in &self.monsters {
+                    if monster.position == position && monster.is_alive {
+                        let true_color = monster.entity.colors[0];
+                        let r = ((true_color >> 16) as u8 as f32 * ambient_color.0) as u8;
+                        let g = ((true_color >> 8) as u8 as f32 * ambient_color.1) as u8;
+                        let b = ((true_color) as u8 as f32 * ambient_color.2) as u8;
+                        line.push_str(&format!(
+                            "{}",
+                            &(monster.entity.symbols[0].to_string().truecolor(r, g, b))
+                        ));
+                        is_monster = true;
+                        break;
+                    }
+                }
+
+                if is_monster {
+                    continue;
+                }
+
                 let is_player_position = position == self.player.position;
                 let land = &self.lands[position.1 * self.width + position.0];
                 if is_player_position {
