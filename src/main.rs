@@ -81,12 +81,13 @@ fn main() -> crossterm::Result<()> {
                         state: _,
                     } => map.move_player(1, 1),
                     KeyEvent {
-                        code: KeyCode::Char('I'),
+                        code: KeyCode::Char('i'),
                         modifiers: event::KeyModifiers::NONE,
                         kind: _,
                         state: _,
                     } => {
                         map.show_stats = !map.show_stats;
+                        map.render(terminal::size().expect("Could not get terminal size"));
                     },
                     KeyEvent {
                         code: KeyCode::Char('x'),
