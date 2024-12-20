@@ -7,13 +7,13 @@ fn main() {
         .run();
 }
 
-fn setup(mut commands: Commands) {
+fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     // Camera
     commands.spawn(Camera2dBundle::default());
 
     // Text
     // Load the font
-    let font = asset_server.load("fonts/NotoSansJP-Regular.otf");
+    let font = asset_server.load("fonts/NotoSansJP-VariableFont_wght.ttf");
     
     commands.spawn(Text2dBundle {
         text: Text::from_section(
