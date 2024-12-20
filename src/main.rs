@@ -2,6 +2,7 @@ use bevy::{
     prelude::*,
     window::{PrimaryWindow, WindowResolution},
 };
+use rand::seq::SliceRandom;
 mod components;
 mod map;
 mod systems;
@@ -105,63 +106,85 @@ fn setup(
     let start_x = -width / 2.0 + spacing / 2.0;
     let start_y = height / 2.0 - spacing / 2.0;
 
-    // Spawn monsters
-    // Oni
-    commands.spawn((
-        create_text_color_bundle(
-            font.clone(),
-            "鬼",
-            start_x + spacing * 5.0,
-            start_y - spacing * 3.0,
-            1.0,
-            Color::srgb(1.0, 0.0, 0.0),
-        ),
-        Monster {
-            hp: 20,
-            max_hp: 20,
-            strength: 5,
-            name: String::from("Oni"),
-            is_alive: true,
-        },
-    ));
+    // Generate terrain first
+    map::generation::generate_terrain(&mut commands, font.clone(), width, height, char_size);
 
-    // Goblin
-    commands.spawn((
-        create_text_color_bundle(
-            font.clone(),
-            "G",
-            start_x + spacing * 7.0,
-            start_y - spacing * 3.0,
-            1.0,
-            Color::srgb(0.0, 1.0, 0.0),
-        ),
-        Monster {
-            hp: 10,
-            max_hp: 10,
-            strength: 3,
-            name: String::from("Goblin"),
-            is_alive: true,
-        },
-    ));
+    // Wait a frame for terrain to spawn
+    let terrain_query = commands.world.query::<(&Transform, &MapItem)>();
+    let mut valid_positions = Vec::new();
 
-    // Kappa
-    commands.spawn((
-        create_text_color_bundle(
-            font.clone(),
-            "河",
-            start_x + spacing * 5.0,
-            start_y - spacing * 5.0,
-            1.0,
-            Color::srgb(0.0, 0.0, 1.0),
-        ),
-        Monster {
-            hp: 15,
-            max_hp: 15,
-            strength: 4,
-            name: String::from("Kappa"),
-            is_alive: true,
-        },
-    ));
+    // Collect all non-solid positions
+    for (transform, map_item) in terrain_query.iter(&commands.world) {
+        if !map_item.solid {
+            valid_positions.push((transform.translation.x, transform.translation.y));
+        }
+    }
+
+    // Spawn monsters at random valid positions
+    if !valid_positions.is_empty() {
+        // Oni
+        if let Some(pos) = valid_positions.choose(&mut rand::thread_rng()) {
+            commands.spawn((
+                create_text_color_bundle(
+                    font.clone(),
+                    "鬼",
+                    pos.0,
+                    pos.1,
+                    1.0,
+                    Color::srgb(1.0, 0.0, 0.0),
+                ),
+                Monster {
+                    hp: 20,
+                    max_hp: 20,
+                    strength: 5,
+                    name: String::from("Oni"),
+                    is_alive: true,
+                },
+            ));
+        }
+
+        // Goblin
+        if let Some(pos) = valid_positions.choose(&mut rand::thread_rng()) {
+            commands.spawn((
+                create_text_color_bundle(
+                    font.clone(),
+                    "G",
+                    pos.0,
+                    pos.1,
+                    1.0,
+                    Color::srgb(0.0, 1.0, 0.0),
+                ),
+                Monster {
+                    hp: 10,
+                    max_hp: 10,
+                    strength: 3,
+                    name: String::from("Goblin"),
+                    is_alive: true,
+                },
+            ));
+        }
+
+        // Kappa
+        if let Some(pos) = valid_positions.choose(&mut rand::thread_rng()) {
+            commands.spawn((
+                create_text_color_bundle(
+                    font.clone(),
+                    "河",
+                    pos.0,
+                    pos.1,
+                    1.0,
+                    Color::srgb(0.0, 0.0, 1.0),
+                ),
+                Monster {
+                    hp: 15,
+                    max_hp: 15,
+                    strength: 4,
+                    name: String::from("Kappa"),
+                    is_alive: true,
+                },
+            ));
+        }
+    }
 
     // Spawn combat message bar
     commands.spawn((
@@ -177,8 +200,6 @@ fn setup(
             message: String::new(),
         },
     ));
-    // Generate terrain
-    map::generation::generate_terrain(&mut commands, font.clone(), width, height, 12.0);
 }
 
 fn create_text_color_bundle(
