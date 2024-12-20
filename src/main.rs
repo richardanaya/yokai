@@ -65,12 +65,15 @@ fn spawn_player(
 #[derive(Resource)]
 struct InventoryState;
 
+#[derive(Component)]
+struct InventoryUI;
+
 fn toggle_inventory(
     keyboard: Res<ButtonInput<KeyCode>>,
     mut query: Query<&mut PlayerStats, With<Player>>,
     mut commands: Commands,
     inventory_state: Option<ResMut<InventoryState>>,
-    inventory_ui: Query<Entity, With<Text2d>>,
+    inventory_ui: Query<Entity, With<InventoryUI>>,
 ) {
     if keyboard.just_pressed(KeyCode::KeyI) {
         if let Ok(mut stats) = query.get_single_mut() {
@@ -177,6 +180,8 @@ fn setup(
                     map_item.current_color(),
                 ),
                 map_item,
+                ),
+                InventoryUI,
             ));
         }
     }
@@ -242,7 +247,8 @@ fn render_inventory(
                 stats.charisma
             );
 
-            commands.spawn(create_text_color_bundle(
+            commands.spawn((
+                create_text_color_bundle(
                 font,
                 &overlay,
                 -window.width() / 2.0 + 150.0,
