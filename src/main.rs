@@ -47,7 +47,7 @@ fn spawn_player(
 
     // Spawn player body
     commands.spawn((
-        create_text_color_bundle(font.clone(), "@", start_x, start_y, 1.0, Color::srgb(0.8, 0.8, 0.8))...,
+        create_text_color_bundle(font.clone(), "@", start_x, start_y, 1.0, Color::srgb(0.8, 0.8, 0.8)),
         Visibility::default(),
         Player,
         PlayerBody,
@@ -63,7 +63,7 @@ fn spawn_player(
             start_y,
             1.0,
             Color::srgb(0.8, 0.8, 0.8),
-        )...,
+        ),
         Visibility::default(),
         Player,
         PlayerWeapon,
@@ -161,7 +161,7 @@ fn setup_inventory_display(
                     y,
                     0.0,
                     Color::srgb(0.1, 0.1, 0.1),
-                )...,
+                ),
                 InventoryUI,
             ));
         }
@@ -335,7 +335,7 @@ fn create_text_color_bundle(
     y: f32,
     z: f32,
     color: Color,
-) -> (Text2d, TextFont, Transform, TextColor, TextAlignment) {
+) -> (Text2d, TextFont, Transform, TextColor) {
     return (
         Text2d::new(text),
         TextFont {
@@ -345,7 +345,6 @@ fn create_text_color_bundle(
         },
         Transform::from_xyz(x, y, z),
         TextColor::from(color),
-        TextAlignment::Left,
     );
 }
 
@@ -403,7 +402,7 @@ fn render_inventory(
                 window.height() / 2.0 - 100.0,
                 0.0,
                 Color::srgb(0.8, 0.8, 0.8),
-            )...,
+            ),
             InventoryUI,
         ));
         }
