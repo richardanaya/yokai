@@ -70,13 +70,7 @@ pub fn player_movement(
                 if (terrain_transform.translation.x - new_pos.x).abs() < 1.0
                     && (terrain_transform.translation.y - new_pos.y).abs() < 1.0
                 {
-                    // Check if the terrain at this position is solid
-                    if map_item.current_character() == "石" 
-                        || map_item.current_character() == "岩"
-                        || map_item.current_character() == "磐"
-                        || map_item.current_character() == "木"
-                        || map_item.current_character() == "林"
-                        || map_item.current_character() == "森" {
+                    if map_item.solid {
                         solid_terrain = true;
                         break;
                     }

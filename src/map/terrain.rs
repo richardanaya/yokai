@@ -17,6 +17,7 @@ impl TerrainType {
         MapItem::new(
             self.characters.iter().map(|&s| s.to_string()).collect(),
             self.colors.clone(),
+            self.solid,
         )
     }
 }

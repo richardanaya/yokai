@@ -5,16 +5,18 @@ pub struct MapItem {
     pub character_variants: Vec<String>,
     pub color_variants: Vec<Color>,
     pub current_variant: usize,
+    pub solid: bool,
 }
 
 impl MapItem {
-    pub fn new(characters: Vec<String>, colors: Vec<Color>) -> Self {
+    pub fn new(characters: Vec<String>, colors: Vec<Color>, solid: bool) -> Self {
         let variant_count = characters.len().min(colors.len());
         assert!(variant_count > 0, "Must provide at least one variant");
         Self {
             character_variants: characters,
             color_variants: colors,
             current_variant: rand::random::<usize>() % variant_count,
+            solid,
         }
     }
 
