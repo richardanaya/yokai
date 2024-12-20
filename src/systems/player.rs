@@ -9,6 +9,11 @@ pub fn player_movement(
     )>,
     mut message_query: Query<(&mut Text2d, &mut CombatMessage)>,
 ) {
+    // First check if player exists in the world
+    if param_set.p0().is_empty() {
+        return; // Player not loaded yet, don't process movement
+    }
+
     let grid_size = 12.0;
     let mut delta = Vec2::ZERO;
 
