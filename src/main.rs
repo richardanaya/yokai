@@ -1,4 +1,4 @@
-use bevy::{prelude::*, window::WindowResolution};
+use bevy::{prelude::*, window::{WindowResolution, PrimaryWindow}};
 mod components;
 use components::*;
 
@@ -18,6 +18,7 @@ fn main() {
 }
 
 fn setup(
+    #[allow(clippy::type_complexity)]
     mut commands: Commands, 
     asset_server: Res<AssetServer>,
     window_query: Query<&Window, With<PrimaryWindow>>,
