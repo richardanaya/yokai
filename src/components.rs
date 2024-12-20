@@ -31,6 +31,43 @@ impl MapItem {
 pub struct Player;
 
 #[derive(Component)]
+pub struct PlayerStats {
+    pub level: u32,
+    pub exp: u32,
+    pub hp: u32,
+    pub max_hp: u32,
+    pub mp: u32,
+    pub max_mp: u32,
+    pub strength: u32,
+    pub dexterity: u32,
+    pub constitution: u32,
+    pub intelligence: u32,
+    pub wisdom: u32,
+    pub charisma: u32,
+    pub show_inventory: bool,
+}
+
+impl Default for PlayerStats {
+    fn default() -> Self {
+        Self {
+            level: 1,
+            exp: 0,
+            hp: 20,
+            max_hp: 20,
+            mp: 10,
+            max_mp: 10,
+            strength: 10,
+            dexterity: 10,
+            constitution: 10,
+            intelligence: 10,
+            wisdom: 10,
+            charisma: 10,
+            show_inventory: false,
+        }
+    }
+}
+
+#[derive(Component)]
 pub struct PlayerBody {
     pub character: String,
 }

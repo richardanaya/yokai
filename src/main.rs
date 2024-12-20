@@ -2,6 +2,7 @@ use bevy::{
     input::keyboard::KeyCode,
     prelude::*,
     window::{PrimaryWindow, WindowResolution},
+    text::Text2dBounds,
 };
 mod components;
 mod terrain;
@@ -20,7 +21,7 @@ fn main() {
         }))
         .insert_resource(GameMap::new(100, 100)) // Create a 100x100 map
         .add_systems(Startup, (setup, spawn_player))
-        .add_systems(Update, player_movement)
+        .add_systems(Update, (player_movement, toggle_inventory, render_inventory))
         .run();
 }
 
@@ -40,6 +41,7 @@ fn spawn_player(
         PlayerBody {
             character: "@".to_string(),
         },
+        PlayerStats::default(),
     ));
 
     // Spawn player weapon
@@ -57,6 +59,17 @@ fn spawn_player(
             character: "/".to_string(),
         },
     ));
+}
+
+fn toggle_inventory(
+    keyboard: Res<ButtonInput<KeyCode>>,
+    mut query: Query<&mut PlayerStats, With<Player>>,
+) {
+    if keyboard.just_pressed(KeyCode::KeyI) {
+        if let Ok(mut stats) = query.get_single_mut() {
+            stats.show_inventory = !stats.show_inventory;
+        }
+    }
 }
 
 fn player_movement(
@@ -175,4 +188,64 @@ fn create_text_color_bundle(
         Transform::from_xyz(x, y, z),
         TextColor::from(color),
     );
+}
+
+fn render_inventory(
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+    query: Query<&PlayerStats, With<Player>>,
+    window_query: Query<&Window, With<PrimaryWindow>>,
+) {
+    if let Ok(stats) = query.get_single() {
+        if stats.show_inventory {
+            let window = window_query.single();
+            let font = asset_server.load("fonts/NotoSansJP-VariableFont_wght.ttf");
+            
+            // Create inventory overlay
+            let overlay = format!(
+                "╔═══ Character Stats ═══╗\n\
+                 ║ Level: {:13} ║\n\
+                 ║ EXP: {}/100         ║\n\
+                 ║ HP: {}/{}           ║\n\
+                 ║ MP: {}/{}           ║\n\
+                 ╟──── Attributes ─────╢\n\
+                 ║ STR: {:13} ║\n\
+                 ║ DEX: {:13} ║\n\
+                 ║ CON: {:13} ║\n\
+                 ║ INT: {:13} ║\n\
+                 ║ WIS: {:13} ║\n\
+                 ║ CHA: {:13} ║\n\
+                 ╚═══════════════════════╝",
+                stats.level,
+                stats.exp,
+                stats.hp, stats.max_hp,
+                stats.mp, stats.max_mp,
+                stats.strength,
+                stats.dexterity,
+                stats.constitution,
+                stats.intelligence,
+                stats.wisdom,
+                stats.charisma
+            );
+
+            commands.spawn((
+                Text2dBundle {
+                    text: Text::from_section(
+                        overlay,
+                        TextStyle {
+                            font: font.clone(),
+                            font_size: 20.0,
+                            color: Color::WHITE,
+                        },
+                    ),
+                    transform: Transform::from_xyz(
+                        -window.width() / 2.0 + 20.0,
+                        window.height() / 2.0 - 20.0,
+                        10.0,
+                    ),
+                    ..default()
+                },
+            ));
+        }
+    }
 }
