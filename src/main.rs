@@ -1,6 +1,7 @@
 use bevy::{
     prelude::*,
     window::{PrimaryWindow, WindowResolution},
+    render::color::Color,
 };
 mod components;
 mod map;
@@ -20,6 +21,7 @@ fn main() {
             }),
             ..default()
         }))
+        .insert_resource(ClearColor(Color::srgb(0.2, 0.1, 0.05)))
         .init_state::<GameState>()
         .add_systems(Startup, setup_intro)
         .add_systems(OnEnter(GameState::Playing), (setup, spawn_player))
