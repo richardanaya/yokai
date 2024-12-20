@@ -229,4 +229,3 @@ fn create_text_color_bundle(
         TextColor::from(color),
     );
 }
-
