@@ -1,5 +1,5 @@
-use bevy::prelude::*;
 use crate::GameState;
+use bevy::{input::keyboard::KeyboardInput, prelude::*, text::FontSmoothing};
 
 #[derive(Component)]
 pub struct IntroCamera;
