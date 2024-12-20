@@ -28,7 +28,7 @@ fn main() {
             Update,
             (
                 handle_intro.run_if(in_state(GameState::Intro)),
-                fade_out_intro_music.run_if(in_state(GameState::Playing)).into_config()
+                fade_out_intro_music.run_if(in_state(GameState::Playing)).into_configs()
             )
         )
         .add_systems(

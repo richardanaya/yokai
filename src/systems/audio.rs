@@ -36,7 +36,7 @@ impl AudioState {
         
         std::thread::spawn(move || {
             for _ in 0..steps {
-                if let Ok(mut sink) = sink.lock() {
+                if let Ok(sink) = sink.lock() {
                     let new_volume = (sink.volume() - volume_step).max(0.0);
                     sink.set_volume(new_volume);
                 }
@@ -50,12 +50,12 @@ impl AudioState {
 }
 
 pub fn setup_audio(mut commands: Commands) {
-    let mut audio_state = AudioState::new();
+    let audio_state = AudioState::new();
     
     // Load and play the intro music
     let file = BufReader::new(File::open("src/soundtrack_1.mp3").unwrap());
     let source = Decoder::new(file).unwrap();
-    if let Ok(mut sink) = audio_state.sink.lock() {
+    if let Ok(sink) = audio_state.sink.lock() {
         sink.append(source);
     }
     
