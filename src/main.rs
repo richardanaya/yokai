@@ -120,9 +120,12 @@ fn setup(
     use rand::Rng;
     let mut rng = rand::thread_rng();
 
-    // Create terrain with random distribution
-    for row in 0..game_map.height {
-        for col in 0..game_map.width {
+    // Create terrain grid
+    for row in 0..rows {
+        for col in 0..cols {
+            let x = start_x + col as f32 * spacing;
+            let y = start_y - row as f32 * spacing;
+
             // Randomly select terrain type
             let terrain = match rng.gen_range(0..100) {
                 0..=60 => grass(), // 60% chance of grass
@@ -130,33 +133,25 @@ fn setup(
                 _ => rock(),       // 20% chance of rocks
             };
 
-            let item = commands
-                .spawn((
-                    terrain.to_map_item(),
-                    MapPosition {
-                        x: col,
-                        y: row,
-                        z: 0,
-                    },
-                ))
-                .id();
-            game_map.add_item(col, row, item);
-        }
-    }
-
-    for row in 0..rows {
-        for col in 0..cols {
-            let x = start_x + col as f32 * spacing;
-            let y = start_y - row as f32 * spacing;
-
-            // For now, just show the ground layer
-            commands.spawn(create_text_color_bundle(
-                font.clone(),
-                "地",
-                x,
-                y,
-                0.0,
-                Color::srgb(0.2, 0.5, 0.2),
+            // Convert terrain to map item
+            let map_item = terrain.to_map_item();
+            
+            // Spawn the terrain entity
+            commands.spawn((
+                create_text_color_bundle(
+                    font.clone(),
+                    map_item.current_character(),
+                    x,
+                    y,
+                    0.0,
+                    map_item.current_color(),
+                ),
+                map_item,
+                MapPosition {
+                    x: col as i32,
+                    y: row as i32,
+                    z: 0,
+                },
             ));
         }
     }
