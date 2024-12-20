@@ -166,27 +166,26 @@ fn player_movement(
     keyboard: Res<ButtonInput<KeyCode>>,
     mut player_query: Query<&mut Transform, With<Player>>,
 ) {
-    let movement_speed = 5.0;
-    let mut direction = Vec2::ZERO;
+    let grid_size = 12.0;
+    let mut delta = Vec2::ZERO;
 
-    if keyboard.pressed(KeyCode::KeyW) {
-        direction.y += 1.0;
+    if keyboard.just_pressed(KeyCode::KeyW) {
+        delta.y += grid_size;
     }
-    if keyboard.pressed(KeyCode::KeyS) {
-        direction.y -= 1.0;
+    if keyboard.just_pressed(KeyCode::KeyS) {
+        delta.y -= grid_size;
     }
-    if keyboard.pressed(KeyCode::KeyA) {
-        direction.x -= 1.0;
+    if keyboard.just_pressed(KeyCode::KeyA) {
+        delta.x -= grid_size;
     }
-    if keyboard.pressed(KeyCode::KeyD) {
-        direction.x += 1.0;
+    if keyboard.just_pressed(KeyCode::KeyD) {
+        delta.x += grid_size;
     }
 
-    if direction != Vec2::ZERO {
-        direction = direction.normalize();
+    if delta != Vec2::ZERO {
         for mut transform in player_query.iter_mut() {
-            transform.translation.x += direction.x * movement_speed;
-            transform.translation.y += direction.y * movement_speed;
+            transform.translation.x += delta.x;
+            transform.translation.y += delta.y;
         }
     }
 }
