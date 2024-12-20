@@ -237,6 +237,7 @@ fn setup_intro(mut commands: Commands, asset_server: Res<AssetServer>) {
             order: 0,
             ..default()
         },
+        IntroCamera,
     ));
 
     // Load the font
@@ -274,16 +275,20 @@ fn handle_intro(
     mut keyboard_events: EventReader<KeyboardInput>,
     mut commands: Commands,
     intro_text: Query<Entity, With<IntroText>>,
+    intro_camera: Query<Entity, With<IntroCamera>>,
 ) {
     for _ in keyboard_events.read() {
-        // Clean up intro text
-        for entity in intro_text.iter() {
+        // Clean up intro text and camera
+        for entity in intro_text.iter().chain(intro_camera.iter()) {
             commands.entity(entity).despawn();
         }
         next_state.set(GameState::Playing);
         break;
     }
 }
+
+#[derive(Component)]
+struct IntroCamera;
 
 #[derive(Component, Default)]
 struct IntroText;
