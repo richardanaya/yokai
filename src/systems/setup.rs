@@ -1,6 +1,5 @@
 use crate::{components::*, create_text_color_bundle, TerrainEntity};
 use bevy::{prelude::*, window::PrimaryWindow};
-use crate::map::terrain::TerrainType;
 
 use rand::seq::SliceRandom;
 
@@ -38,6 +37,102 @@ fn find_valid_spawn_position(
 
     // Randomly select one of the valid positions
     valid_positions.choose(&mut rand::thread_rng()).copied()
+}
+
+pub fn spawn_monsters(
+    mut commands: Commands,
+    marker_query: Query<Entity, With<SpawnMonstersMarker>>,
+    terrain_query: Query<(&Transform, &MapItem), With<TerrainEntity>>,
+    asset_server: Res<AssetServer>,
+) {
+    // Only run if we have the marker
+    if marker_query.is_empty() {
+        return;
+    }
+
+    let font = asset_server.load("fonts/NotoSansJP-VariableFont_wght.ttf");
+    let mut valid_positions = Vec::new();
+
+    // Collect all non-solid positions
+    for (transform, map_item) in terrain_query.iter() {
+        if !map_item.solid {
+            valid_positions.push((transform.translation.x, transform.translation.y));
+        }
+    }
+
+    // Spawn monsters at random valid positions
+    if !valid_positions.is_empty() {
+        use rand::seq::SliceRandom;
+        let mut rng = rand::thread_rng();
+
+        // Oni
+        if let Some(pos) = valid_positions.choose(&mut rng) {
+            commands.spawn((
+                create_text_color_bundle(
+                    font.clone(),
+                    "鬼",
+                    pos.0,
+                    pos.1,
+                    1.0,
+                    Color::srgb(1.0, 0.0, 0.0),
+                ),
+                Monster {
+                    hp: 20,
+                    max_hp: 20,
+                    strength: 5,
+                    name: String::from("Oni"),
+                    is_alive: true,
+                },
+            ));
+        }
+
+        // Goblin
+        if let Some(pos) = valid_positions.choose(&mut rng) {
+            commands.spawn((
+                create_text_color_bundle(
+                    font.clone(),
+                    "G",
+                    pos.0,
+                    pos.1,
+                    1.0,
+                    Color::srgb(0.0, 1.0, 0.0),
+                ),
+                Monster {
+                    hp: 10,
+                    max_hp: 10,
+                    strength: 3,
+                    name: String::from("Goblin"),
+                    is_alive: true,
+                },
+            ));
+        }
+
+        // Kappa
+        if let Some(pos) = valid_positions.choose(&mut rng) {
+            commands.spawn((
+                create_text_color_bundle(
+                    font.clone(),
+                    "河",
+                    pos.0,
+                    pos.1,
+                    1.0,
+                    Color::srgb(0.0, 0.0, 1.0),
+                ),
+                Monster {
+                    hp: 15,
+                    max_hp: 15,
+                    strength: 4,
+                    name: String::from("Kappa"),
+                    is_alive: true,
+                },
+            ));
+        }
+    }
+
+    // Clean up the marker
+    for entity in marker_query.iter() {
+        commands.entity(entity).despawn();
+    }
 }
 
 pub fn spawn_player(

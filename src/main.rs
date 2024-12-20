@@ -2,7 +2,6 @@ use bevy::{
     prelude::*,
     window::{PrimaryWindow, WindowResolution},
 };
-use rand::seq::SliceRandom;
 mod components;
 mod map;
 mod systems;
@@ -25,6 +24,7 @@ fn main() {
         .init_state::<GameState>()
         .add_systems(Startup, setup_intro)
         .add_systems(OnEnter(GameState::Playing), (setup, spawn_player))
+        .add_systems(Update, spawn_monsters)
         .add_systems(
             Update,
             (
@@ -109,16 +109,12 @@ fn setup(
     // Generate terrain first
     map::generation::generate_terrain(&mut commands, font.clone(), width, height, char_size);
 
-    // Wait a frame for terrain to spawn
-    let terrain_query = commands.world.query::<(&Transform, &MapItem)>();
+    // Get valid positions from terrain entities
     let mut valid_positions = Vec::new();
-
-    // Collect all non-solid positions
-    for (transform, map_item) in terrain_query.iter(&commands.world) {
-        if !map_item.solid {
-            valid_positions.push((transform.translation.x, transform.translation.y));
-        }
-    }
+    let terrain_query = commands.world.query::<(&Transform, &MapItem)>();
+    
+    // We'll spawn monsters in the next frame when terrain is ready
+    commands.spawn_empty().insert(SpawnMonstersMarker);
 
     // Spawn monsters at random valid positions
     if !valid_positions.is_empty() {

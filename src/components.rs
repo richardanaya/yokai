@@ -88,3 +88,6 @@ pub struct Monster {
 pub struct CombatMessage {
     pub message: String,
 }
+
+#[derive(Component)]
+pub struct SpawnMonstersMarker;

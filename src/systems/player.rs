@@ -1,4 +1,4 @@
-use crate::{components::*, TerrainEntity, map::terrain::TerrainType};
+use crate::{components::*, TerrainEntity};
 use bevy::prelude::*;
 
 pub fn player_movement(
