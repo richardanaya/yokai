@@ -170,8 +170,10 @@ fn setup_inventory_display(
 
 fn player_movement(
     keyboard: Res<ButtonInput<KeyCode>>,
-    mut player_query: Query<&mut Transform, With<Player>>,
-    mut monster_query: Query<(&Transform, &Monster)>,
+    mut param_set: ParamSet<(
+        Query<&mut Transform, With<Player>>,
+        Query<(&Transform, &Monster)>,
+    )>,
     mut message_query: Query<(&mut Text2d, &mut CombatMessage)>,
 ) {
     let grid_size = 12.0;
@@ -191,12 +193,12 @@ fn player_movement(
     }
 
     if delta != Vec2::ZERO {
-        let player_pos = player_query.single().translation.clone();
+        let player_pos = param_set.p0().single().translation.clone();
         let new_pos = Vec3::new(player_pos.x + delta.x, player_pos.y + delta.y, player_pos.z);
 
         // Check for monster collision
         let mut collided = false;
-        for (monster_transform, monster) in monster_query.iter() {
+        for (monster_transform, monster) in param_set.p1().iter() {
             if (monster_transform.translation.x - new_pos.x).abs() < 1.0 
                && (monster_transform.translation.y - new_pos.y).abs() < 1.0 {
                 collided = true;
@@ -209,7 +211,7 @@ fn player_movement(
         }
 
         if !collided {
-            for mut transform in player_query.iter_mut() {
+            for mut transform in param_set.p0().iter_mut() {
                 transform.translation = new_pos;
             }
         }
