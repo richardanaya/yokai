@@ -2,7 +2,6 @@ use bevy::prelude::*;
 use crate::components::MapItem;
 
 #[derive(Clone)]
-#[derive(Clone)]
 #[allow(dead_code)]
 pub struct TerrainType {
     pub name: &'static str,

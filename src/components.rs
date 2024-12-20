@@ -68,14 +68,11 @@ impl Default for PlayerStats {
 }
 
 #[derive(Component)]
-#[derive(Component)]
 pub struct PlayerBody;
 
 #[derive(Component)]
-#[derive(Component)]
 pub struct PlayerWeapon;
 
-#[derive(Component)]
 #[derive(Component)]
 #[allow(dead_code)]
 pub struct MapPosition {
@@ -84,7 +81,6 @@ pub struct MapPosition {
     pub z: i32,  // Stack position
 }
 
-#[derive(Resource)]
 #[derive(Resource)]
 #[allow(dead_code)]
 pub struct GameMap {
