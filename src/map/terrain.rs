@@ -48,3 +48,14 @@ pub fn tree() -> TerrainType {
         ],
     }
 }
+
+pub fn earth() -> TerrainType {
+    TerrainType {
+        characters: vec!["土", "地", "圭"],
+        colors: vec![
+            Color::srgb(0.6, 0.4, 0.2),
+            Color::srgb(0.55, 0.35, 0.15),
+            Color::srgb(0.5, 0.3, 0.1),
+        ],
+    }
+}

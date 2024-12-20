@@ -31,9 +31,10 @@ pub fn generate_terrain(
 
             // Randomly select terrain type
             let terrain = match rng.gen_range(0..100) {
-                0..=60 => grass(), // 60% chance of grass
-                61..=80 => tree(), // 20% chance of trees
-                _ => rock(),       // 20% chance of rocks
+                0..=50 => grass(), // 50% chance of grass
+                51..=70 => tree(), // 20% chance of trees
+                71..=85 => rock(), // 15% chance of rocks
+                _ => earth(),      // 15% chance of bare earth
             };
 
             // Convert terrain to map item
