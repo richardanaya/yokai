@@ -89,7 +89,11 @@ fn toggle_inventory(
             
             // Toggle player visibility
             for mut visibility in player_visibility.iter_mut() {
-                visibility.is_visible = !stats.show_inventory;
+                *visibility = if stats.show_inventory {
+                    Visibility::Hidden
+                } else {
+                    Visibility::Inherited
+                };
             }
             
             // Toggle inventory state
