@@ -1,4 +1,4 @@
-use crate::components::*;
+use crate::{components::*, TerrainEntity};
 use bevy::prelude::*;
 
 pub fn player_movement(
@@ -6,6 +6,7 @@ pub fn player_movement(
     mut param_set: ParamSet<(
         Query<&mut Transform, With<Player>>,
         Query<(&Transform, &mut Monster)>,
+        Query<(&Transform, &MapItem), With<TerrainEntity>>,
     )>,
     mut message_query: Query<(&mut Text2d, &mut CombatMessage)>,
 ) {
@@ -63,14 +64,35 @@ pub fn player_movement(
         }
 
         if !collided {
-            // Move both player body and weapon
-            for mut transform in param_set.p0().iter_mut() {
-                if transform.translation.x == player_pos.x {
-                    // This is the body
-                    transform.translation = new_pos;
-                } else {
-                    // This is the weapon
-                    transform.translation = Vec3::new(new_pos.x + 12.0, new_pos.y, new_pos.z);
+            // Check for solid terrain at the new position
+            let mut solid_terrain = false;
+            for (terrain_transform, map_item) in param_set.p2().iter() {
+                if (terrain_transform.translation.x - new_pos.x).abs() < 1.0
+                    && (terrain_transform.translation.y - new_pos.y).abs() < 1.0
+                {
+                    // Found terrain at target position, check if it's solid
+                    if map_item.current_character() == "石" 
+                        || map_item.current_character() == "岩"
+                        || map_item.current_character() == "磐"
+                        || map_item.current_character() == "木"
+                        || map_item.current_character() == "林"
+                        || map_item.current_character() == "森" {
+                        solid_terrain = true;
+                        break;
+                    }
+                }
+            }
+
+            if !solid_terrain {
+                // Move both player body and weapon
+                for mut transform in param_set.p0().iter_mut() {
+                    if transform.translation.x == player_pos.x {
+                        // This is the body
+                        transform.translation = new_pos;
+                    } else {
+                        // This is the weapon
+                        transform.translation = Vec3::new(new_pos.x + 12.0, new_pos.y, new_pos.z);
+                    }
                 }
             }
         }
