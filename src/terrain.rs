@@ -1,5 +1,5 @@
-use bevy::prelude::*;
 use crate::components::MapItem;
+use bevy::prelude::*;
 
 #[derive(Clone)]
 #[allow(dead_code)]
@@ -32,7 +32,7 @@ pub fn grass() -> TerrainType {
 
 pub fn rock() -> TerrainType {
     TerrainType {
-        name: "Rock", 
+        name: "Rock",
         characters: vec!["石", "岩", "磐"],
         colors: vec![
             Color::srgb(0.5, 0.5, 0.5),
