@@ -25,6 +25,7 @@ fn main() {
                 player_movement,
                 toggle_inventory,
                 render_inventory.run_if(|state: Option<Res<InventoryState>>| state.is_some()),
+                cleanup_dead_monsters,
             ),
         )
         .run();
@@ -399,6 +400,17 @@ fn create_text_color_bundle(
         Transform::from_xyz(x, y, z),
         TextColor::from(color),
     );
+}
+
+fn cleanup_dead_monsters(
+    mut commands: Commands,
+    query: Query<(Entity, &Monster)>,
+) {
+    for (entity, monster) in query.iter() {
+        if !monster.is_alive {
+            commands.entity(entity).despawn();
+        }
+    }
 }
 
 fn render_inventory(
