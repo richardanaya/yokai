@@ -5,8 +5,11 @@ use bevy::{
 };
 mod components;
 mod terrain;
+mod systems;
+
 use components::*;
 use terrain::*;
+use systems::*;
 
 fn main() {
     App::new()
