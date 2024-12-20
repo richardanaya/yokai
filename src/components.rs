@@ -1,9 +1,23 @@
 use bevy::prelude::*;
+use bevy::input::keyboard::KeyCode;
 
 #[derive(Component, Clone)]
 pub struct MapItem {
     pub character: String,
     pub color: Color,
+}
+
+#[derive(Component)]
+pub struct Player;
+
+#[derive(Component)]
+pub struct PlayerBody {
+    pub character: String,
+}
+
+#[derive(Component)]
+pub struct PlayerWeapon {
+    pub character: String,
 }
 
 #[derive(Component)]

@@ -1,4 +1,4 @@
-use bevy::{prelude::*, window::{WindowResolution, PrimaryWindow}};
+use bevy::{prelude::*, window::{WindowResolution, PrimaryWindow}, input::keyboard::KeyCode};
 mod components;
 use components::*;
 
@@ -13,8 +13,81 @@ fn main() {
             ..default()
         }))
         .insert_resource(GameMap::new(100, 100))  // Create a 100x100 map
-        .add_systems(Startup, setup)
+        .add_systems(Startup, (setup, spawn_player))
+        .add_systems(Update, player_movement)
         .run();
+}
+
+fn spawn_player(
+    mut commands: Commands,
+    window_query: Query<&Window, With<PrimaryWindow>>,
+) {
+    let window = window_query.single();
+    
+    // Spawn player body
+    commands.spawn((
+        Text2dBundle {
+            text: Text::from_section(
+                "@",
+                TextStyle {
+                    font_size: 20.0,
+                    color: Color::YELLOW,
+                    ..default()
+                },
+            ),
+            transform: Transform::from_xyz(0.0, 0.0, 1.0),
+            ..default()
+        },
+        Player,
+        PlayerBody { character: "@".to_string() },
+    ));
+
+    // Spawn player weapon
+    commands.spawn((
+        Text2dBundle {
+            text: Text::from_section(
+                "/",
+                TextStyle {
+                    font_size: 20.0,
+                    color: Color::WHITE,
+                    ..default()
+                },
+            ),
+            transform: Transform::from_xyz(12.0, 0.0, 1.0), // Offset to the right
+            ..default()
+        },
+        Player,
+        PlayerWeapon { character: "/".to_string() },
+    ));
+}
+
+fn player_movement(
+    keyboard: Res<Input<KeyCode>>,
+    mut player_query: Query<&mut Transform, With<Player>>,
+) {
+    let movement_speed = 5.0;
+    let mut direction = Vec2::ZERO;
+
+    if keyboard.pressed(KeyCode::W) {
+        direction.y += 1.0;
+    }
+    if keyboard.pressed(KeyCode::S) {
+        direction.y -= 1.0;
+    }
+    if keyboard.pressed(KeyCode::A) {
+        direction.x -= 1.0;
+    }
+    if keyboard.pressed(KeyCode::D) {
+        direction.x += 1.0;
+    }
+
+    if direction != Vec2::ZERO {
+        direction = direction.normalize();
+        for mut transform in player_query.iter_mut() {
+            transform.translation.x += direction.x * movement_speed;
+            transform.translation.y += direction.y * movement_speed;
+        }
+    }
 }
 
 fn setup(
