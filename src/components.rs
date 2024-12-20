@@ -73,3 +73,10 @@ pub struct PlayerBody;
 #[derive(Component)]
 pub struct PlayerWeapon;
 
+#[derive(Component)]
+pub struct Monster {
+    pub hp: u32,
+    pub max_hp: u32,
+    pub strength: u32,
+}
+

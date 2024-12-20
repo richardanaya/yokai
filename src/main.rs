@@ -207,6 +207,23 @@ fn setup(
     // Load the font
     let font = asset_server.load("fonts/NotoSansJP-VariableFont_wght.ttf");
 
+    // Spawn monster
+    commands.spawn((
+        create_text_color_bundle(
+            font.clone(),
+            "鬼",
+            start_x + spacing * 5.0,  // 5 spaces right of origin
+            start_y - spacing * 3.0,  // 3 spaces down
+            1.0,
+            Color::RED,
+        ),
+        Monster {
+            hp: 20,
+            max_hp: 20,
+            strength: 5,
+        },
+    ));
+
     // Get window dimensions
     let window = window_query.single();
     let width = window.width();
