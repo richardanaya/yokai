@@ -439,7 +439,7 @@ impl Map {
             let mut line = String::new();
             for x in 0..self.width {
                 let position = (x, y);
-                // Check for monsters first
+                // Check for living monsters first
                 let mut is_monster = false;
                 for monster in &self.monsters {
                     if monster.position == position && monster.is_alive {
