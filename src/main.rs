@@ -258,7 +258,7 @@ fn setup(
             start_y - spacing * 3.0,  // 3 spaces down
             1.0,
             Color::srgb(1.0, 0.0, 0.0), // Red color
-        )...,
+        ),
         Monster {
             hp: 20,
             max_hp: 20,
@@ -276,7 +276,7 @@ fn setup(
             height / 2.0 - 20.0,   // Top edge - small margin
             2.0,
             Color::srgb(0.8, 0.8, 0.8),
-        )...,
+        ),
         CombatMessage {
             message: String::new(),
         },
@@ -320,7 +320,7 @@ fn setup(
                     y,
                     0.0,
                     map_item.current_color(),
-                )...,
+                ),
                 map_item,
                 TerrainEntity,
             ));
