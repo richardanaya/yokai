@@ -39,9 +39,15 @@ fn spawn_player(
     // Load the font
     let font = asset_server.load("fonts/NotoSansJP-VariableFont_wght.ttf");
 
+    let window = window_query.single();
+    let char_size = 12.0;
+    // Calculate starting position (top-left corner)
+    let start_x = -window.width() / 2.0 + char_size / 2.0;
+    let start_y = window.height() / 2.0 - char_size / 2.0;
+
     // Spawn player body
     commands.spawn((
-        create_text_color_bundle(font.clone(), "@", 0.0, 0.0, 1.0, Color::srgb(0.8, 0.8, 0.8)),
+        create_text_color_bundle(font.clone(), "@", start_x, start_y, 1.0, Color::srgb(0.8, 0.8, 0.8)),
         Visibility::default(),
         Player,
         PlayerBody,
@@ -53,8 +59,8 @@ fn spawn_player(
         create_text_color_bundle(
             font.clone(),
             "/",
-            12.0,
-            0.0,
+            start_x + char_size,
+            start_y,
             1.0,
             Color::srgb(0.8, 0.8, 0.8),
         ),
