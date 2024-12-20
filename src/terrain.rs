@@ -3,7 +3,6 @@ use bevy::prelude::*;
 
 #[derive(Clone)]
 pub struct TerrainType {
-    pub name: &'static str,
     pub characters: Vec<&'static str>,
     pub colors: Vec<Color>,
 }
@@ -19,7 +18,6 @@ impl TerrainType {
 
 pub fn grass() -> TerrainType {
     TerrainType {
-        name: "Grass",
         characters: vec!["草", "艸", "茸"],
         colors: vec![
             Color::srgb(0.2, 0.6, 0.2),
@@ -31,7 +29,6 @@ pub fn grass() -> TerrainType {
 
 pub fn rock() -> TerrainType {
     TerrainType {
-        name: "Rock",
         characters: vec!["石", "岩", "磐"],
         colors: vec![
             Color::srgb(0.5, 0.5, 0.5),
@@ -43,7 +40,6 @@ pub fn rock() -> TerrainType {
 
 pub fn tree() -> TerrainType {
     TerrainType {
-        name: "Tree",
         characters: vec!["木", "林", "森"],
         colors: vec![
             Color::srgb(0.1, 0.4, 0.1),
