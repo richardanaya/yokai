@@ -86,4 +86,3 @@ pub struct Monster {
 pub struct CombatMessage {
     pub message: String,
 }
-

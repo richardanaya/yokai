@@ -1,19 +1,13 @@
-use bevy::{prelude::*, window::PrimaryWindow};
 use crate::{
-    components::*,
-    TerrainEntity,
-    MainCamera,
-    InventoryUI,
-    InventoryState,
-    create_text_color_bundle,
+    components::*, create_text_color_bundle, InventoryState, InventoryUI, MainCamera, TerrainEntity,
 };
+use bevy::{prelude::*, window::PrimaryWindow};
 
 pub fn toggle_inventory(
     keyboard: Res<ButtonInput<KeyCode>>,
     mut query: Query<&mut PlayerStats, With<Player>>,
     mut commands: Commands,
     _terrain_entities: Query<Entity, With<TerrainEntity>>,
-    player_visibility: Query<&mut Visibility, With<Player>>,
     _camera_query: Query<Entity, With<MainCamera>>,
     asset_server: Res<AssetServer>,
     window_query: Query<&Window, With<PrimaryWindow>>,
@@ -57,17 +51,4 @@ pub fn setup_inventory_display(
             ));
         }
     }
-}
-
-pub fn render_inventory(
-    commands: Commands,
-    _asset_server: Res<AssetServer>,
-    _query: Query<&PlayerStats, With<Player>>,
-    _window_query: Query<&Window, With<PrimaryWindow>>,
-    inventory_state: ResMut<InventoryState>,
-) {
-    if !inventory_state.needs_update {
-        return;
-    }
-    // Inventory rendering logic here
 }

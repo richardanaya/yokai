@@ -3,12 +3,12 @@ use bevy::{
     window::{PrimaryWindow, WindowResolution},
 };
 mod components;
-mod terrain;
 mod systems;
+mod terrain;
 
 use components::*;
-use terrain::*;
 use systems::*;
+use terrain::*;
 
 fn main() {
     App::new()
@@ -28,7 +28,8 @@ fn main() {
                 toggle_inventory,
                 render_inventory.run_if(|state: Option<Res<InventoryState>>| state.is_some()),
                 cleanup_dead_monsters,
-            ).chain(),
+            )
+                .chain(),
         )
         .run();
 }
@@ -46,8 +47,6 @@ pub struct TerrainEntity;
 
 #[derive(Component)]
 pub struct MainCamera;
-
-
 
 fn setup(
     mut commands: Commands,
@@ -210,26 +209,6 @@ fn create_text_color_bundle(
         Transform::from_xyz(x, y, z),
         TextColor::from(color),
     );
-}
-
-fn cleanup_inventory_ui(
-    mut commands: Commands,
-    inventory_ui: Query<Entity, With<InventoryUI>>,
-) {
-    for entity in inventory_ui.iter() {
-        commands.entity(entity).despawn();
-    }
-}
-
-fn cleanup_dead_monsters(
-    mut commands: Commands,
-    query: Query<(Entity, &Monster)>,
-) {
-    for (entity, monster) in query.iter() {
-        if !monster.is_alive {
-            commands.entity(entity).despawn();
-        }
-    }
 }
 
 fn render_inventory(
