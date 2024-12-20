@@ -109,15 +109,6 @@ fn toggle_inventory(
 
 
             if stats.show_inventory {
-                // Hide terrain when showing inventory
-                for entity in terrain_entities.iter() {
-                    commands.entity(entity).despawn();
-                }
-
-                // Hide player
-                for mut visibility in player_visibility.iter_mut() {
-                    *visibility = Visibility::Hidden;
-                }
 
                 commands.insert_resource(InventoryState { needs_update: true });
 
@@ -128,20 +119,7 @@ fn toggle_inventory(
                 for entity in inventory_ui.iter() {
                     commands.entity(entity).despawn();
                 }
-                // Show player
-                for mut visibility in player_visibility.iter_mut() {
-                    *visibility = Visibility::Inherited;
-                }
-
                 commands.remove_resource::<InventoryState>();
-
-                // Remove existing camera
-                if let Ok(camera_entity) = camera_query.get_single() {
-                    commands.entity(camera_entity).despawn();
-                }
-
-                // Recreate terrain and camera
-                setup(commands, asset_server, window_query);
             }
         }
     }
