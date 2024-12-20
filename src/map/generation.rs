@@ -1,6 +1,8 @@
 use super::terrain::*;
 use bevy::prelude::*;
 use rand::Rng;
+use crate::TerrainEntity;
+use crate::create_text_color_bundle;
 
 pub fn generate_terrain(
     commands: &mut Commands,
