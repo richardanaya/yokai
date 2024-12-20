@@ -3,8 +3,29 @@ use bevy::input::keyboard::KeyCode;
 
 #[derive(Component, Clone)]
 pub struct MapItem {
-    pub character: String,
-    pub color: Color,
+    pub character_variants: Vec<String>,
+    pub color_variants: Vec<Color>,
+    pub current_variant: usize,
+}
+
+impl MapItem {
+    pub fn new(characters: Vec<String>, colors: Vec<Color>) -> Self {
+        let variant_count = characters.len().min(colors.len());
+        assert!(variant_count > 0, "Must provide at least one variant");
+        Self {
+            character_variants: characters,
+            color_variants: colors,
+            current_variant: rand::random::<usize>() % variant_count,
+        }
+    }
+
+    pub fn current_character(&self) -> &str {
+        &self.character_variants[self.current_variant]
+    }
+
+    pub fn current_color(&self) -> Color {
+        self.color_variants[self.current_variant]
+    }
 }
 
 #[derive(Component)]
