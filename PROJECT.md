@@ -46,6 +46,27 @@ A roguelike game featuring Japanese yokai (supernatural creatures), using Unicod
   - Forest (森) - cover/stealth
   - Mountain (山) - elevation
 
+### Audio Foundation
+- Music System
+  - Track management
+    - Smooth crossfading between tracks
+    - Volume control and normalization
+    - Loop point handling
+    - Multiple simultaneous track support
+  - Basic context system
+    - Location-based playback
+    - Time-of-day transitions
+    - Combat state detection
+  - Resource handling
+    - Efficient MP3 loading
+    - Memory management
+    - Audio buffer control
+  - Technical implementation
+    - Thread-safe playback
+    - Error recovery
+    - Sample rate conversion
+    - Stream synchronization
+
 ## Phase 2: Environmental Systems
 ### Time System
 - Day/Night Cycle Implementation
