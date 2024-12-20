@@ -101,12 +101,14 @@ pub fn handle_intro(
     intro_text: Query<Entity, With<IntroText>>,
     intro_camera: Query<Entity, With<IntroCamera>>,
     time: Res<Time>,
-    mut title_query: Query<(&mut Transform, &mut TextColor), With<TitleText>>,
-    mut press_key_query: Query<(&mut TextColor, &mut PressKeyText), With<PressKeyText>>,
-    mut background_query: Query<&mut Transform, With<BackgroundText>>,
+    mut query_set: ParamSet<(
+        Query<(&mut Transform, &mut TextColor), With<TitleText>>,
+        Query<(&mut TextColor, &mut PressKeyText), With<PressKeyText>>,
+        Query<&mut Transform, With<BackgroundText>>,
+    )>,
 ) {
     // Animate title pulse
-    if let Ok((mut transform, mut color)) = title_query.get_single_mut() {
+    if let Ok((mut transform, mut color)) = query_set.p0().get_single_mut() {
         let scale = 1.0 + (time.elapsed_secs() * 2.0).sin() * 0.1;
         transform.scale = Vec3::splat(scale);
         let brightness = 0.8 + (time.elapsed_secs() * 3.0).sin() * 0.2;
@@ -114,14 +116,14 @@ pub fn handle_intro(
     }
 
     // Animate press key text fade
-    if let Ok((mut color, mut timer)) = press_key_query.get_single_mut() {
+    if let Ok((mut color, mut timer)) = query_set.p1().get_single_mut() {
         timer.timer.tick(time.delta());
         let alpha = (timer.timer.fraction() * PI).sin().abs();
         color.0 = color.0.with_alpha(alpha);
     }
 
     // Rotate background kanji
-    for mut transform in background_query.iter_mut() {
+    for mut transform in query_set.p2().iter_mut() {
         transform.rotate_z(time.delta_secs() * 0.2);
     }
     for _ in keyboard_events.read() {
