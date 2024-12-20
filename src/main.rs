@@ -65,7 +65,9 @@ fn spawn_player(
 }
 
 #[derive(Resource)]
-struct InventoryState;
+struct InventoryState {
+    needs_update: bool,
+}
 
 #[derive(Component)]
 struct InventoryUI;
@@ -107,7 +109,7 @@ fn toggle_inventory(
                     *visibility = Visibility::Hidden;
                 }
                 
-                commands.insert_resource(InventoryState);
+                commands.insert_resource(InventoryState { needs_update: true });
                 
                 // Setup inventory display
                 setup_inventory_display(&mut commands, &asset_server, &window_query);
@@ -278,9 +280,15 @@ fn render_inventory(
     asset_server: Res<AssetServer>,
     query: Query<&PlayerStats, With<Player>>,
     window_query: Query<&Window, With<PrimaryWindow>>,
+    mut inventory_state: ResMut<InventoryState>,
 ) {
+    if !inventory_state.needs_update {
+        return;
+    }
+    
     if let Ok(stats) = query.get_single() {
         if stats.show_inventory {
+            inventory_state.needs_update = false;
             let window = window_query.single();
             let font = asset_server.load("fonts/NotoSansJP-VariableFont_wght.ttf");
 
