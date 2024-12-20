@@ -1,6 +1,8 @@
 use bevy::{prelude::*, window::{WindowResolution, PrimaryWindow}, input::keyboard::KeyCode};
 mod components;
+mod terrain;
 use components::*;
+use terrain::*;
 
 fn main() {
     App::new()
