@@ -232,11 +232,11 @@ fn setup_intro(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn((
         IntroTextBundle {
             text: Text2d::new("妖怪"),
-            text_style: TextStyle {
+            text_font: TextFont {
                 font: font.clone(),
                 font_size: 60.0,
-                color: Color::WHITE,
             },
+            text_color: TextColor::from(Color::srgb(1.0, 1.0, 1.0)),
             transform: Transform::from_xyz(0.0, 50.0, 0.0),
             ..default()
         }
@@ -249,7 +249,7 @@ fn setup_intro(mut commands: Commands, asset_server: Res<AssetServer>) {
             text_style: TextStyle {
                 font,
                 font_size: 20.0,
-                color: Color::GRAY,
+                color: Color::srgb(0.5, 0.5, 0.5),
             },
             transform: Transform::from_xyz(0.0, -50.0, 0.0),
             ..default()
@@ -279,7 +279,8 @@ struct IntroText;
 #[derive(Bundle, Default)]
 struct IntroTextBundle {
     text: Text2d,
-    text_style: TextStyle,
+    text_font: TextFont,
+    text_color: TextColor,
     transform: Transform,
     intro: IntroText,
 }
