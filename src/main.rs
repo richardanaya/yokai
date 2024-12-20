@@ -65,8 +65,15 @@ fn setup(
     asset_server: Res<AssetServer>,
     window_query: Query<&Window, With<PrimaryWindow>>,
 ) {
-    // Camera
-    commands.spawn((Camera2d::default(), MainCamera));
+    // Camera with explicit order
+    commands.spawn((
+        Camera2d::default(),
+        Camera {
+            order: 1,
+            ..default()
+        },
+        MainCamera,
+    ));
 
     // Load the font
     let font = asset_server.load("fonts/NotoSansJP-VariableFont_wght.ttf");
@@ -223,8 +230,14 @@ fn create_text_color_bundle(
     );
 }
 fn setup_intro(mut commands: Commands, asset_server: Res<AssetServer>) {
-    // Camera
-    commands.spawn(Camera2d::default());
+    // Camera with explicit order
+    commands.spawn((
+        Camera2d::default(),
+        Camera {
+            order: 0,
+            ..default()
+        },
+    ));
 
     // Load the font
     let font = asset_server.load("fonts/NotoSansJP-VariableFont_wght.ttf");
