@@ -116,7 +116,7 @@ fn toggle_inventory(
                 commands.remove_resource::<InventoryState>();
                 
                 // Recreate terrain
-                setup(&mut commands, asset_server, window_query);
+                setup(commands, asset_server, window_query);
             }
         }
     }
