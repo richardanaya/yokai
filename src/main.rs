@@ -2,6 +2,7 @@ use bevy::{
     prelude::*,
     window::{PrimaryWindow, WindowResolution},
 };
+use rand::seq::SliceRandom;
 mod components;
 mod map;
 mod systems;
@@ -109,15 +110,10 @@ fn setup(
     // Generate terrain first
     map::generation::generate_terrain(&mut commands, font.clone(), width, height, char_size);
 
-    // Get valid positions from terrain entities
-    let mut valid_positions = Vec::new();
-    let terrain_query = commands.world.query::<(&Transform, &MapItem)>();
-    
     // We'll spawn monsters in the next frame when terrain is ready
     commands.spawn_empty().insert(SpawnMonstersMarker);
 
-    // Spawn monsters at random valid positions
-    if !valid_positions.is_empty() {
+    // Combat message will be spawned later when needed
         // Oni
         if let Some(pos) = valid_positions.choose(&mut rand::thread_rng()) {
             commands.spawn((
