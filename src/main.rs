@@ -229,32 +229,30 @@ fn setup_intro(mut commands: Commands, asset_server: Res<AssetServer>) {
     let font = asset_server.load("fonts/NotoSansJP-VariableFont_wght.ttf");
 
     // Spawn title text
-    commands.spawn((
-        IntroTextBundle {
-            text: Text2d::new("妖怪"),
-            text_font: TextFont {
-                font: font.clone(),
-                font_size: 60.0,
-            },
-            text_color: TextColor::from(Color::srgb(1.0, 1.0, 1.0)),
-            transform: Transform::from_xyz(0.0, 50.0, 0.0),
-            ..default()
-        }
-    ));
+    commands.spawn(IntroTextBundle {
+        text: Text2d::new("妖怪"),
+        text_font: TextFont {
+            font: font.clone(),
+            font_size: 60.0,
+            font_smoothing: 1.0,
+        },
+        text_color: TextColor::from(Color::srgb(1.0, 1.0, 1.0)),
+        transform: Transform::from_xyz(0.0, 50.0, 0.0),
+        ..default()
+    });
 
     // Spawn "Press any key" text
-    commands.spawn((
-        IntroTextBundle {
-            text: Text2d::new("Press any key to start"),
-            text_style: TextStyle {
-                font,
-                font_size: 20.0,
-                color: Color::srgb(0.5, 0.5, 0.5),
-            },
-            transform: Transform::from_xyz(0.0, -50.0, 0.0),
-            ..default()
-        }
-    ));
+    commands.spawn(IntroTextBundle {
+        text: Text2d::new("Press any key to start"),
+        text_font: TextFont {
+            font,
+            font_size: 20.0,
+            font_smoothing: 1.0,
+        },
+        text_color: TextColor::from(Color::srgb(0.5, 0.5, 0.5)),
+        transform: Transform::from_xyz(0.0, -50.0, 0.0),
+        ..default()
+    });
 }
 
 fn handle_intro(
