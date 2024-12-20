@@ -4,7 +4,7 @@ use bevy::{
 };
 mod components;
 mod systems;
-mod terrain;
+mod map;
 
 use components::*;
 use systems::*;
