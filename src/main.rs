@@ -1,8 +1,8 @@
 use bevy::{
     input::keyboard::KeyCode,
     prelude::*,
+    text::Text2dBundle,
     window::{PrimaryWindow, WindowResolution},
-    text::Text2dBounds,
 };
 mod components;
 mod terrain;
@@ -21,7 +21,10 @@ fn main() {
         }))
         .insert_resource(GameMap::new(100, 100)) // Create a 100x100 map
         .add_systems(Startup, (setup, spawn_player))
-        .add_systems(Update, (player_movement, toggle_inventory, render_inventory))
+        .add_systems(
+            Update,
+            (player_movement, toggle_inventory, render_inventory),
+        )
         .run();
 }
 
@@ -148,7 +151,7 @@ fn setup(
 
             // Convert terrain to map item
             let map_item = terrain.to_map_item();
-            
+
             // Spawn the terrain entity
             commands.spawn((
                 create_text_color_bundle(
@@ -200,7 +203,7 @@ fn render_inventory(
         if stats.show_inventory {
             let window = window_query.single();
             let font = asset_server.load("fonts/NotoSansJP-VariableFont_wght.ttf");
-            
+
             // Create inventory overlay
             let overlay = format!(
                 "╔═══ Character Stats ═══╗\n\
@@ -218,8 +221,10 @@ fn render_inventory(
                  ╚═══════════════════════╝",
                 stats.level,
                 stats.exp,
-                stats.hp, stats.max_hp,
-                stats.mp, stats.max_mp,
+                stats.hp,
+                stats.max_hp,
+                stats.mp,
+                stats.max_mp,
                 stats.strength,
                 stats.dexterity,
                 stats.constitution,
@@ -228,23 +233,13 @@ fn render_inventory(
                 stats.charisma
             );
 
-            commands.spawn((
-                Text2dBundle {
-                    text: Text::from_section(
-                        overlay,
-                        TextStyle {
-                            font: font.clone(),
-                            font_size: 20.0,
-                            color: Color::WHITE,
-                        },
-                    ),
-                    transform: Transform::from_xyz(
-                        -window.width() / 2.0 + 20.0,
-                        window.height() / 2.0 - 20.0,
-                        10.0,
-                    ),
-                    ..default()
-                },
+            commands.spawn(create_text_color_bundle(
+                font,
+                &overlay,
+                -window.width() / 2.0 + 100.0,
+                window.height() / 2.0 - 100.0,
+                0.0,
+                Color::srgb(0.8, 0.8, 0.8),
             ));
         }
     }
