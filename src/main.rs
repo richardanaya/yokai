@@ -287,17 +287,3 @@ fn handle_intro(
     }
 }
 
-#[derive(Component)]
-struct IntroCamera;
-
-#[derive(Component, Default)]
-struct IntroText;
-
-#[derive(Bundle, Default)]
-struct IntroTextBundle {
-    text: Text2d,
-    text_font: TextFont,
-    text_color: TextColor,
-    transform: Transform,
-    intro: IntroText,
-}
