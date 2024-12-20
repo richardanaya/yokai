@@ -193,7 +193,7 @@ fn player_movement(
     }
 
     if delta != Vec2::ZERO {
-        let player_pos = param_set.p0().single().translation.clone();
+        let player_pos = param_set.p0().iter().next().unwrap().translation.clone();
         let new_pos = Vec3::new(player_pos.x + delta.x, player_pos.y + delta.y, player_pos.z);
 
         // Check for monster collision
@@ -211,8 +211,15 @@ fn player_movement(
         }
 
         if !collided {
+            // Move both player body and weapon
             for mut transform in param_set.p0().iter_mut() {
-                transform.translation = new_pos;
+                if transform.translation.x == player_pos.x {
+                    // This is the body
+                    transform.translation = new_pos;
+                } else {
+                    // This is the weapon
+                    transform.translation = Vec3::new(new_pos.x + 12.0, new_pos.y, new_pos.z);
+                }
             }
         }
     }
