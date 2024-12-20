@@ -101,6 +101,7 @@ fn toggle_inventory(
     camera_query: Query<Entity, With<MainCamera>>,
     asset_server: Res<AssetServer>,
     window_query: Query<&Window, With<PrimaryWindow>>,
+    inventory_ui: Query<Entity, With<InventoryUI>>,
 ) {
     if keyboard.just_pressed(KeyCode::KeyI) {
         if let Ok(mut stats) = query.get_single_mut() {
