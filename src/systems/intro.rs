@@ -50,7 +50,7 @@ pub fn setup_intro(mut commands: Commands, asset_server: Res<AssetServer>) {
         let x = angle.cos() * radius;
         let y = angle.sin() * radius;
         commands.spawn((
-            Text2d::new(kanji),
+            Text2d::new(kanji.to_string()),
             TextFont {
                 font: font.clone(),
                 font_size: 40.0,
@@ -107,22 +107,22 @@ pub fn handle_intro(
 ) {
     // Animate title pulse
     if let Ok((mut transform, mut color)) = title_query.get_single_mut() {
-        let scale = 1.0 + (time.elapsed_seconds() * 2.0).sin() * 0.1;
+        let scale = 1.0 + (time.elapsed_secs() * 2.0).sin() * 0.1;
         transform.scale = Vec3::splat(scale);
-        let brightness = 0.8 + (time.elapsed_seconds() * 3.0).sin() * 0.2;
+        let brightness = 0.8 + (time.elapsed_secs() * 3.0).sin() * 0.2;
         color.0 = Color::srgb(1.0, brightness, brightness);
     }
 
     // Animate press key text fade
     if let Ok((mut color, mut timer)) = press_key_query.get_single_mut() {
         timer.timer.tick(time.delta());
-        let alpha = (timer.timer.percent() * PI).sin().abs();
+        let alpha = (timer.timer.percent_left() * PI).sin().abs();
         color.0.set_a(alpha);
     }
 
     // Rotate background kanji
     for mut transform in background_query.iter_mut() {
-        transform.rotate_z(time.delta_seconds() * 0.2);
+        transform.rotate_z(time.delta_secs() * 0.2);
     }
     for _ in keyboard_events.read() {
         // Clean up intro text and camera

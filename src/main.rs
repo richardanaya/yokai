@@ -1,7 +1,5 @@
 use bevy::{
-    input::keyboard::KeyboardInput,
     prelude::*,
-    text::FontSmoothing,
     window::{PrimaryWindow, WindowResolution},
 };
 mod components;
@@ -29,7 +27,7 @@ fn main() {
             Update,
             handle_intro
                 .run_if(in_state(GameState::Intro))
-                .before(bevy::render::camera::camera_system),
+                .before(bevy::render::camera::camera_system::<OrthographicProjection>),
         )
         .add_systems(
             Update,
