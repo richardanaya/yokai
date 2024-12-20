@@ -3,12 +3,11 @@ use bevy::{
     window::{PrimaryWindow, WindowResolution},
 };
 mod components;
-mod systems;
 mod map;
+mod systems;
 
 use components::*;
 use systems::*;
-use terrain::*;
 
 fn main() {
     App::new()
@@ -28,8 +27,10 @@ fn main() {
             Update,
             (
                 handle_intro.run_if(in_state(GameState::Intro)),
-                fade_out_intro_music.run_if(in_state(GameState::Playing)).into_configs()
-            )
+                fade_out_intro_music
+                    .run_if(in_state(GameState::Playing))
+                    .into_configs(),
+            ),
         )
         .add_systems(
             Update,
@@ -44,10 +45,7 @@ fn main() {
         .run();
 }
 
-fn fade_out_intro_music(
-    audio_state: Res<AudioState>,
-    mut ran: Local<bool>,
-) {
+fn fade_out_intro_music(audio_state: Res<AudioState>, mut ran: Local<bool>) {
     if !*ran {
         audio_state.into_inner().fade_out(2.0);
         *ran = true;
