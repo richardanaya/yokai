@@ -117,8 +117,7 @@ pub fn handle_intro(
     if let Ok((mut color, mut timer)) = press_key_query.get_single_mut() {
         timer.timer.tick(time.delta());
         let alpha = (timer.timer.fraction() * PI).sin().abs();
-        color.0.set_a(alpha);
-        color.0 = color.0.with_a(alpha);
+        color.0 = color.0.with_alpha(alpha);
     }
 
     // Rotate background kanji
