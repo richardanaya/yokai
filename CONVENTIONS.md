@@ -5,6 +5,10 @@
 ### Libraries
 - Using Bevy 0.15
 
+## Bevy specific
+- DO NOT USE TextBundle2D (it doesn't exist), use create_text_color_bundle
+- only use COLOR:srgb for color
+
 ### Naming
 - Use `snake_case` for functions, methods, variables, modules, and packages
 - Use `PascalCase` for types, traits, and enums

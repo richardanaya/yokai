@@ -3,4 +3,3 @@
 /read-only PROJECT.md
 /add **/*.rs
 /add *.toml
-s
