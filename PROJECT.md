@@ -374,20 +374,187 @@ A roguelike game featuring Japanese yokai (supernatural creatures), using Unicod
   - Color blind support
 
 ## Phase 5: Advanced Features
-- Yokai interaction system
-  - Combat
-  - Dialog
-  - Alliances
-- Item system with Japanese mythological items
-- Special abilities based on time/weather conditions
-- Sound effects and background music matching environment
+### Yokai Interaction System
+- Social Mechanics
+  - Reputation System (評判)
+    - Individual yokai memory
+    - Faction standing
+    - Action consequences
+    - Reputation decay over time
+  - Dialog System (会話)
+    - Context-aware responses
+    - Mood influences
+    - Time/weather effects on dialog
+    - Language style adaptation
+  - Alliance System (同盟)
+    - Faction formation
+    - Territory sharing
+    - Combined abilities
+    - Betrayal mechanics
+
+### Item System (道具)
+- Mythological Items
+  - Sacred Tools (神器)
+    - 草薙剣 (Kusanagi Sword)
+    - 八咫鏡 (Yata Mirror)
+    - 勾玉 (Magatama)
+  - Magical Items (妖器)
+    - 隠れ蓑 (Invisibility Cloak)
+    - 打出の小槌 (Lucky Mallet)
+    - 分身の術 (Clone Scroll)
+  - Consumables (消耗品)
+    - お守り (Protective Charms)
+    - 巻物 (Spell Scrolls)
+    - 薬 (Potions)
+
+### Special Abilities (特殊能力)
+- Environmental Powers
+  - Time-based Abilities
+    - Dawn/Dusk power peaks
+    - Night vision
+    - Time manipulation
+  - Weather Abilities
+    - Storm calling
+    - Fog creation
+    - Snow walking
+  - Seasonal Powers
+    - Spring growth
+    - Summer flames
+    - Autumn spirits
+    - Winter frost
+
+### Audio System (音響)
+- Dynamic Music
+  - Time-based Themes
+    - Morning serenity
+    - Day activity
+    - Evening transition
+    - Night mystery
+  - Weather Variations
+    - Rain ambience
+    - Storm intensity
+    - Snow silence
+  - Combat Music
+    - Battle intensity scaling
+    - Yokai-specific themes
+    - Victory/defeat jingles
+
+- Sound Effects
+  - Environmental Sounds
+    - Weather effects
+    - Terrain interaction
+    - Time passage
+  - Creature Sounds
+    - Yokai calls
+    - Movement sounds
+    - Combat effects
+  - UI Audio
+    - Menu interaction
+    - Status changes
+    - Achievement sounds
 
 ## Phase 6: Polish
-- Balance gameplay
-- Add story elements
-- Implement save/load system
-- Add tutorials and help system
-- UI improvements and accessibility features
+### Gameplay Balance
+- Combat System
+  - Damage scaling
+  - Defense mechanics
+  - Status effect duration
+  - Recovery rates
+- Resource Management
+  - Item availability
+  - Energy systems
+  - Currency balance
+- Progression System
+  - Experience curves
+  - Ability unlock rates
+  - Achievement pacing
+
+### Narrative Elements
+- Story Framework
+  - Main Quest Line
+    - Multiple endings
+    - Branch points
+    - Character arcs
+  - Side Stories
+    - Yokai tales
+    - Seasonal events
+    - Historical references
+  - Dynamic Events
+    - Random encounters
+    - Time-based stories
+    - Weather-triggered plots
+
+### Save System
+- Technical Implementation
+  - Save file format
+    - Character data
+    - World state
+    - Achievement progress
+  - Auto-save features
+    - Checkpoint system
+    - Recovery options
+  - Cross-platform compatibility
+    - Save file portability
+    - Version control
+    - Backup system
+
+### Tutorial System
+- Learning Progression
+  - Basic Controls
+    - Movement tutorial
+    - Interface guide
+    - Combat basics
+  - Advanced Mechanics
+    - Yokai interaction
+    - Environmental systems
+    - Special abilities
+  - Master Techniques
+    - Combat combinations
+    - Strategic planning
+    - Resource optimization
+
+### UI/UX Improvements
+- Interface Enhancement
+  - Command Accessibility
+    - Keyboard shortcuts
+    - Mouse support
+    - Controller mapping
+  - Visual Clarity
+    - Status indicators
+    - Alert system
+    - Mini-map
+  - Information Display
+    - Tooltip system
+    - Context help
+    - Status effects
+
+- Accessibility Features
+  - Visual Options
+    - High contrast mode
+    - Color blind support
+    - Text scaling
+  - Audio Options
+    - Volume control
+    - Sound alternatives
+    - Audio cues
+  - Input Adaptation
+    - Key remapping
+    - Alternative controls
+    - Macro support
+
+### Performance Optimization
+- Code Optimization
+  - Memory management
+  - CPU utilization
+  - Loading times
+- Graphics Pipeline
+  - Rendering efficiency
+  - Animation smoothing
+  - Effect optimization
+- State Management
+  - Data structures
+  - Cache systems
+  - Event handling
 
 ## Technical Considerations
 - Unicode handling for proper character display
