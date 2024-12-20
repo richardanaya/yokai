@@ -1,5 +1,5 @@
-use bevy::prelude::*;
 use crate::components::*;
+use bevy::prelude::*;
 
 pub fn player_movement(
     keyboard: Res<ButtonInput<KeyCode>>,
@@ -39,7 +39,7 @@ pub fn player_movement(
                 collided = true;
                 // Combat logic
                 monster.hp = monster.hp.saturating_sub(5); // Player deals 5 damage
-                
+
                 if monster.hp == 0 {
                     monster.is_alive = false;
                     if let Ok((mut text, mut message)) = message_query.get_single_mut() {
@@ -48,7 +48,8 @@ pub fn player_movement(
                     }
                 } else {
                     if let Ok((mut text, mut message)) = message_query.get_single_mut() {
-                        message.message = format!("You hit the {}! ({} HP left)", monster.name, monster.hp);
+                        message.message =
+                            format!("You hit the {}! ({} HP left)", monster.name, monster.hp);
                         text.0 = message.message.clone();
                     }
                 }

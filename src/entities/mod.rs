@@ -1,11 +1,13 @@
-mod player;
 mod monster;
+mod player;
 mod terrain;
+mod text;
 mod time;
 
-pub use player::Player;
 pub use monster::Monster;
-pub use terrain::{Land, LandInstance, LAND_TREE, LAND_DIRT};
+pub use player::Player;
+pub use terrain::{Land, LandInstance, LAND_DIRT, LAND_TREE};
+pub use text::*;
 pub use time::*;
 
 use colored::Colorize;
@@ -190,7 +192,7 @@ impl Map {
             items: vec![],
             monsters: {
                 let mut monsters = Vec::new();
-                
+
                 // Add a goblin
                 monsters.push(Monster {
                     entity: Entity {
