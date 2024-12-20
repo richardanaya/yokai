@@ -207,6 +207,19 @@ fn setup(
     // Load the font
     let font = asset_server.load("fonts/NotoSansJP-VariableFont_wght.ttf");
 
+    // Get window dimensions
+    let window = window_query.single();
+    let width = window.width();
+    let height = window.height();
+
+    // Character size and spacing
+    let char_size = 12.0;
+    let spacing = char_size;
+
+    // Calculate starting position (top-left corner)
+    let start_x = -width / 2.0 + spacing / 2.0;
+    let start_y = height / 2.0 - spacing / 2.0;
+
     // Spawn monster
     commands.spawn((
         create_text_color_bundle(
@@ -215,7 +228,7 @@ fn setup(
             start_x + spacing * 5.0,  // 5 spaces right of origin
             start_y - spacing * 3.0,  // 3 spaces down
             1.0,
-            Color::RED,
+            Color::srgb(1.0, 0.0, 0.0), // Red color
         ),
         Monster {
             hp: 20,
@@ -223,13 +236,6 @@ fn setup(
             strength: 5,
         },
     ));
-
-    // Get window dimensions
-    let window = window_query.single();
-    let width = window.width();
-    let height = window.height();
-
-    // Character size and spacing
     let char_size = 12.0;
     let spacing = char_size;
 
