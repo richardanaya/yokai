@@ -114,69 +114,6 @@ fn setup(
     commands.spawn_empty().insert(SpawnMonstersMarker);
 
     // Combat message will be spawned later when needed
-        // Oni
-        if let Some(pos) = valid_positions.choose(&mut rand::thread_rng()) {
-            commands.spawn((
-                create_text_color_bundle(
-                    font.clone(),
-                    "鬼",
-                    pos.0,
-                    pos.1,
-                    1.0,
-                    Color::srgb(1.0, 0.0, 0.0),
-                ),
-                Monster {
-                    hp: 20,
-                    max_hp: 20,
-                    strength: 5,
-                    name: String::from("Oni"),
-                    is_alive: true,
-                },
-            ));
-        }
-
-        // Goblin
-        if let Some(pos) = valid_positions.choose(&mut rand::thread_rng()) {
-            commands.spawn((
-                create_text_color_bundle(
-                    font.clone(),
-                    "G",
-                    pos.0,
-                    pos.1,
-                    1.0,
-                    Color::srgb(0.0, 1.0, 0.0),
-                ),
-                Monster {
-                    hp: 10,
-                    max_hp: 10,
-                    strength: 3,
-                    name: String::from("Goblin"),
-                    is_alive: true,
-                },
-            ));
-        }
-
-        // Kappa
-        if let Some(pos) = valid_positions.choose(&mut rand::thread_rng()) {
-            commands.spawn((
-                create_text_color_bundle(
-                    font.clone(),
-                    "河",
-                    pos.0,
-                    pos.1,
-                    1.0,
-                    Color::srgb(0.0, 0.0, 1.0),
-                ),
-                Monster {
-                    hp: 15,
-                    max_hp: 15,
-                    strength: 4,
-                    name: String::from("Kappa"),
-                    is_alive: true,
-                },
-            ));
-        }
-    }
 
     // Spawn combat message bar
     commands.spawn((
