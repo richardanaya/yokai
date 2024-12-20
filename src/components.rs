@@ -79,6 +79,7 @@ pub struct Monster {
     pub max_hp: u32,
     pub strength: u32,
     pub name: String,
+    pub is_alive: bool,
 }
 
 #[derive(Component)]

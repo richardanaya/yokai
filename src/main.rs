@@ -172,7 +172,7 @@ fn player_movement(
     keyboard: Res<ButtonInput<KeyCode>>,
     mut param_set: ParamSet<(
         Query<&mut Transform, With<Player>>,
-        Query<(&Transform, &Monster)>,
+        Query<(&Transform, &mut Monster)>,
     )>,
     mut message_query: Query<(&mut Text2d, &mut CombatMessage)>,
 ) {
@@ -198,14 +198,26 @@ fn player_movement(
 
         // Check for monster collision
         let mut collided = false;
-        for (monster_transform, monster) in param_set.p1().iter() {
+        for (monster_transform, mut monster) in param_set.p1().iter_mut() {
             if (monster_transform.translation.x - new_pos.x).abs() < 1.0
                 && (monster_transform.translation.y - new_pos.y).abs() < 1.0
+                && monster.is_alive
             {
                 collided = true;
-                if let Ok((mut text, mut message)) = message_query.get_single_mut() {
-                    message.message = format!("You hit the {}!", monster.name);
-                    text.0 = message.message.clone();
+                // Combat logic
+                monster.hp = monster.hp.saturating_sub(5); // Player deals 5 damage
+                
+                if monster.hp == 0 {
+                    monster.is_alive = false;
+                    if let Ok((mut text, mut message)) = message_query.get_single_mut() {
+                        message.message = format!("You defeated the {}!", monster.name);
+                        text.0 = message.message.clone();
+                    }
+                } else {
+                    if let Ok((mut text, mut message)) = message_query.get_single_mut() {
+                        message.message = format!("You hit the {}! ({} HP left)", monster.name, monster.hp);
+                        text.0 = message.message.clone();
+                    }
                 }
                 break;
             }
@@ -266,6 +278,7 @@ fn setup(
             max_hp: 20,
             strength: 5,
             name: String::from("Oni"),
+            is_alive: true,
         },
     ));
 
@@ -284,6 +297,7 @@ fn setup(
             max_hp: 10,
             strength: 3,
             name: String::from("Goblin"),
+            is_alive: true,
         },
     ));
 
@@ -302,6 +316,7 @@ fn setup(
             max_hp: 15,
             strength: 4,
             name: String::from("Kappa"),
+            is_alive: true,
         },
     ));
 
