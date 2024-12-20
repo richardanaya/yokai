@@ -4,10 +4,47 @@
 A roguelike game featuring Japanese yokai (supernatural creatures), using Unicode characters for visualization and incorporating complex environmental systems that affect gameplay.
 
 ## Phase 1: Foundation
-- Basic game engine setup
-- Terminal rendering using Unicode characters (kanji/kana where appropriate)
-- Basic player movement and collision
-- Simple map generation
+### Engine Setup
+- Initialize Rust project with necessary crates
+  - crossterm for terminal manipulation
+  - rand for RNG
+  - serde for data serialization
+  - rodio for audio handling
+- Setup error handling and logging system
+- Implement game loop with configurable tick rate
+
+### Terminal Rendering
+- Unicode character rendering system
+  - Support for full-width CJK characters
+  - UTF-8 encoding handling
+  - Fallback characters for unsupported terminals
+- Color support (16/256/RGB depending on terminal)
+- Double-buffer rendering for smooth updates
+- Screen resize handling
+
+### Player Systems
+- Basic player struct with stats
+  - HP/MP system
+  - Inventory
+  - Position tracking
+- Movement system
+  - 8-directional movement
+  - Collision detection
+  - Smooth animation transitions
+
+### Map Generation
+- Procedural generation system
+  - Room and corridor generation
+  - Biome-based terrain features
+  - Height map for terrain variation
+- Map storage and chunking system
+- Visibility and FOV calculations
+- Basic tile types:
+  - Ground (地面) - walkable
+  - Wall (壁) - blocking
+  - Water (水) - special movement
+  - Forest (森) - cover/stealth
+  - Mountain (山) - elevation
 
 ## Phase 2: Environmental Systems
 - Time system (day/night cycle)
