@@ -9,5 +9,5 @@ repository = "https://github.com/richardanaya/yokai"
 readme="README.md"
 
 [dependencies]
-bevy = "0.12.1"
+bevy = "0.15.0"
 rand = "0.8.5"

@@ -2,6 +2,9 @@
 
 ## Code Style
 
+### Libraries
+- Using Bevy 0.15
+
 ### Naming
 - Use `snake_case` for functions, methods, variables, modules, and packages
 - Use `PascalCase` for types, traits, and enums
