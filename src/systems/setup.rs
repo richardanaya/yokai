@@ -1,5 +1,5 @@
 use bevy::{prelude::*, window::PrimaryWindow};
-use crate::{components::*, TerrainEntity, MainCamera, create_text_color_bundle};
+use crate::{components::*, TerrainEntity, MainCamera};
 use rand::Rng;
 
 pub fn setup(
@@ -77,25 +77,6 @@ pub fn spawn_player(
     ));
 }
 
-pub fn create_text_color_bundle(
-    font: Handle<Font>,
-    text: &str,
-    x: f32,
-    y: f32,
-    z: f32,
-    color: Color,
-) -> (Text2d, TextFont, Transform, TextColor) {
-    (
-        Text2d::new(text),
-        TextFont {
-            font,
-            font_size: 12.0,
-            ..default()
-        },
-        Transform::from_xyz(x, y, z),
-        TextColor::from(color),
-    )
-}
 
 fn spawn_monsters(
     commands: &mut Commands,

@@ -12,9 +12,9 @@ pub fn toggle_inventory(
     keyboard: Res<ButtonInput<KeyCode>>,
     mut query: Query<&mut PlayerStats, With<Player>>,
     mut commands: Commands,
-    terrain_entities: Query<Entity, With<TerrainEntity>>,
-    mut player_visibility: Query<&mut Visibility, With<Player>>,
-    camera_query: Query<Entity, With<MainCamera>>,
+    _terrain_entities: Query<Entity, With<TerrainEntity>>,
+    player_visibility: Query<&mut Visibility, With<Player>>,
+    _camera_query: Query<Entity, With<MainCamera>>,
     asset_server: Res<AssetServer>,
     window_query: Query<&Window, With<PrimaryWindow>>,
     inventory_ui: Query<Entity, With<InventoryUI>>,
@@ -60,11 +60,11 @@ pub fn setup_inventory_display(
 }
 
 pub fn render_inventory(
-    mut commands: Commands,
-    asset_server: Res<AssetServer>,
-    query: Query<&PlayerStats, With<Player>>,
-    window_query: Query<&Window, With<PrimaryWindow>>,
-    mut inventory_state: ResMut<InventoryState>,
+    commands: Commands,
+    _asset_server: Res<AssetServer>,
+    _query: Query<&PlayerStats, With<Player>>,
+    _window_query: Query<&Window, With<PrimaryWindow>>,
+    inventory_state: ResMut<InventoryState>,
 ) {
     if !inventory_state.needs_update {
         return;
