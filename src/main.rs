@@ -21,7 +21,7 @@ fn main() {
             }),
             ..default()
         }))
-        .add_state::<GameState>()
+        .init_state::<GameState>()
         .add_systems(Startup, setup_intro)
         .add_systems(OnEnter(GameState::Playing), (setup, spawn_player))
         .add_systems(Update, handle_intro.run_if(in_state(GameState::Intro)))
@@ -230,36 +230,30 @@ fn setup_intro(mut commands: Commands, asset_server: Res<AssetServer>) {
 
     // Spawn title text
     commands.spawn((
-        Text2dBundle {
-            text: Text::from_section(
-                "妖怪",
-                TextStyle {
-                    font: font.clone(),
-                    font_size: 60.0,
-                    color: Color::WHITE,
-                },
-            ),
+        IntroTextBundle {
+            text: Text2d::new("妖怪"),
+            text_style: TextStyle {
+                font: font.clone(),
+                font_size: 60.0,
+                color: Color::WHITE,
+            },
             transform: Transform::from_xyz(0.0, 50.0, 0.0),
             ..default()
-        },
-        IntroText,
+        }
     ));
 
     // Spawn "Press any key" text
     commands.spawn((
-        Text2dBundle {
-            text: Text::from_section(
-                "Press any key to start",
-                TextStyle {
-                    font,
-                    font_size: 20.0,
-                    color: Color::GRAY,
-                },
-            ),
+        IntroTextBundle {
+            text: Text2d::new("Press any key to start"),
+            text_style: TextStyle {
+                font,
+                font_size: 20.0,
+                color: Color::GRAY,
+            },
             transform: Transform::from_xyz(0.0, -50.0, 0.0),
             ..default()
-        },
-        IntroText,
+        }
     ));
 }
 
@@ -279,5 +273,13 @@ fn handle_intro(
     }
 }
 
-#[derive(Component)]
+#[derive(Component, Default)]
 struct IntroText;
+
+#[derive(Bundle, Default)]
+struct IntroTextBundle {
+    text: Text2d,
+    text_style: TextStyle,
+    transform: Transform,
+    intro: IntroText,
+}
