@@ -1,7 +1,8 @@
 use bevy::{
-    prelude::*,
-    window::{PrimaryWindow, WindowResolution},
     input::keyboard::KeyboardInput,
+    prelude::*,
+    text::FontSmoothing,
+    window::{PrimaryWindow, WindowResolution},
 };
 mod components;
 mod systems;
@@ -234,7 +235,7 @@ fn setup_intro(mut commands: Commands, asset_server: Res<AssetServer>) {
         text_font: TextFont {
             font: font.clone(),
             font_size: 60.0,
-            font_smoothing: 1.0,
+            font_smoothing: bevy::text::FontSmoothing::AntiAliased,
         },
         text_color: TextColor::from(Color::srgb(1.0, 1.0, 1.0)),
         transform: Transform::from_xyz(0.0, 50.0, 0.0),
@@ -247,7 +248,7 @@ fn setup_intro(mut commands: Commands, asset_server: Res<AssetServer>) {
         text_font: TextFont {
             font,
             font_size: 20.0,
-            font_smoothing: 1.0,
+            font_smoothing: FontSmoothing::AntiAliased,
         },
         text_color: TextColor::from(Color::srgb(0.5, 0.5, 0.5)),
         transform: Transform::from_xyz(0.0, -50.0, 0.0),
