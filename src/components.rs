@@ -99,6 +99,7 @@ impl GameMap {
         }
     }
 
+    #[allow(dead_code)]
     pub fn add_item(&mut self, x: i32, y: i32, entity: Entity) {
         if x >= 0 && x < self.width && y >= 0 && y < self.height {
             self.items[x as usize][y as usize].push(entity);
