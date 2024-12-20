@@ -7,9 +7,13 @@ use std::sync::{Arc, Mutex};
 #[derive(Resource)]
 pub struct AudioState {
     _stream: Arc<OutputStream>,
-    _stream_handle: Arc<OutputStreamHandle>,
+    _stream_handle: Arc<OutputStreamHandle>, 
     sink: Arc<Mutex<Sink>>,
 }
+
+// Required to make AudioState safe to share between threads
+unsafe impl Send for AudioState {}
+unsafe impl Sync for AudioState {}
 
 impl AudioState {
     pub fn new() -> Self {

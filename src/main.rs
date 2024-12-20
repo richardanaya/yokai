@@ -28,7 +28,7 @@ fn main() {
             Update,
             (
                 handle_intro.run_if(in_state(GameState::Intro)),
-                fade_out_intro_music.run_if(in_state(GameState::Playing))
+                fade_out_intro_music.run_if(in_state(GameState::Playing)).into_config()
             )
         )
         .add_systems(
@@ -49,7 +49,7 @@ fn fade_out_intro_music(
     mut ran: Local<bool>,
 ) {
     if !*ran {
-        audio_state.fade_out(2.0);
+        audio_state.into_inner().fade_out(2.0);
         *ran = true;
     }
 }
