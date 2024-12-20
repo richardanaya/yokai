@@ -18,7 +18,7 @@ impl TerrainType {
 
 pub fn grass() -> TerrainType {
     TerrainType {
-        characters: vec!["草", "艸", "茸"],
+        characters: vec!["'", ",", "."],
         colors: vec![
             Color::srgb(0.2, 0.6, 0.2),
             Color::srgb(0.3, 0.5, 0.2),
