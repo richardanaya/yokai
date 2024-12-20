@@ -8,6 +8,7 @@
 ## Bevy specific
 - DO NOT USE TextBundle2D (it doesn't exist), use create_text_color_bundle
 - only use COLOR:srgb for color
+- In Bevy, you cannot directly use get_mut with commands.entity. Instead, you need to use a Query to access components of an entity mutably
 
 ### Naming
 - Use `snake_case` for functions, methods, variables, modules, and packages
