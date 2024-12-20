@@ -47,7 +47,14 @@ fn spawn_player(
 
     // Spawn player body
     commands.spawn((
-        create_text_color_bundle(font.clone(), "@", start_x, start_y, 1.0, Color::srgb(0.8, 0.8, 0.8)),
+        create_text_color_bundle(
+            font.clone(),
+            "@",
+            start_x,
+            start_y,
+            1.0,
+            Color::srgb(0.8, 0.8, 0.8),
+        ),
         Visibility::default(),
         Player,
         PlayerBody,
@@ -90,7 +97,7 @@ fn toggle_inventory(
     mut commands: Commands,
     inventory_ui: Query<Entity, With<InventoryUI>>,
     terrain_entities: Query<Entity, With<TerrainEntity>>,
-    mut player_visibility: Query<&mut Visibility, With<Player>>, 
+    mut player_visibility: Query<&mut Visibility, With<Player>>,
     camera_query: Query<Entity, With<MainCamera>>,
     asset_server: Res<AssetServer>,
     window_query: Query<&Window, With<PrimaryWindow>>,
@@ -98,25 +105,25 @@ fn toggle_inventory(
     if keyboard.just_pressed(KeyCode::KeyI) {
         if let Ok(mut stats) = query.get_single_mut() {
             stats.show_inventory = !stats.show_inventory;
-            
+
             // Clean up existing UI elements
             for entity in inventory_ui.iter() {
                 commands.entity(entity).despawn();
             }
-            
+
             if stats.show_inventory {
                 // Hide terrain when showing inventory
                 for entity in terrain_entities.iter() {
                     commands.entity(entity).despawn();
                 }
-                
+
                 // Hide player
                 for mut visibility in player_visibility.iter_mut() {
                     *visibility = Visibility::Hidden;
                 }
-                
+
                 commands.insert_resource(InventoryState { needs_update: true });
-                
+
                 // Setup inventory display
                 setup_inventory_display(&mut commands, &asset_server, &window_query);
             } else {
@@ -124,14 +131,14 @@ fn toggle_inventory(
                 for mut visibility in player_visibility.iter_mut() {
                     *visibility = Visibility::Inherited;
                 }
-                
+
                 commands.remove_resource::<InventoryState>();
-                
+
                 // Remove existing camera
                 if let Ok(camera_entity) = camera_query.get_single() {
                     commands.entity(camera_entity).despawn();
                 }
-                
+
                 // Recreate terrain and camera
                 setup(commands, asset_server, window_query);
             }
@@ -146,22 +153,15 @@ fn setup_inventory_display(
 ) {
     let window = window_query.single();
     let font = asset_server.load("fonts/NotoSansJP-VariableFont_wght.ttf");
-    
+
     // Create a dark background for the inventory
     for row in 0..50 {
         for col in 0..100 {
             let x = -window.width() / 2.0 + col as f32 * 12.0;
             let y = window.height() / 2.0 - row as f32 * 12.0;
-            
+
             commands.spawn((
-                create_text_color_bundle(
-                    font.clone(),
-                    ".",
-                    x,
-                    y,
-                    0.0,
-                    Color::srgb(0.1, 0.1, 0.1),
-                ),
+                create_text_color_bundle(font.clone(), ".", x, y, 0.0, Color::srgb(0.1, 0.1, 0.1)),
                 InventoryUI,
             ));
         }
@@ -199,8 +199,9 @@ fn player_movement(
         // Check for monster collision
         let mut collided = false;
         for (monster_transform, monster) in param_set.p1().iter() {
-            if (monster_transform.translation.x - new_pos.x).abs() < 1.0 
-               && (monster_transform.translation.y - new_pos.y).abs() < 1.0 {
+            if (monster_transform.translation.x - new_pos.x).abs() < 1.0
+                && (monster_transform.translation.y - new_pos.y).abs() < 1.0
+            {
                 collided = true;
                 if let Ok((mut text, mut message)) = message_query.get_single_mut() {
                     message.message = format!("You hit the {}!", monster.name);
@@ -254,8 +255,8 @@ fn setup(
         create_text_color_bundle(
             font.clone(),
             "鬼",
-            start_x + spacing * 5.0,  // 5 spaces right of origin
-            start_y - spacing * 3.0,  // 3 spaces down
+            start_x + spacing * 5.0, // 5 spaces right of origin
+            start_y - spacing * 3.0, // 3 spaces down
             1.0,
             Color::srgb(1.0, 0.0, 0.0), // Red color
         ),
@@ -272,8 +273,8 @@ fn setup(
         create_text_color_bundle(
             font.clone(),
             "",
-            -width / 2.0 + 10.0,  // Left edge + small margin
-            -height / 2.0 + 20.0,   // Bottom edge + small margin
+            0.0,                  // Left edge + small margin
+            -height / 2.0 + 12.0, // Bottom edge + small margin
             2.0,
             Color::srgb(0.8, 0.8, 0.8),
         ),
@@ -358,7 +359,7 @@ fn render_inventory(
     if !inventory_state.needs_update {
         return;
     }
-    
+
     if let Ok(stats) = query.get_single() {
         if stats.show_inventory {
             inventory_state.needs_update = false;
@@ -396,15 +397,15 @@ fn render_inventory(
 
             commands.spawn((
                 create_text_color_bundle(
-                font,
-                &overlay,
-                -window.width() / 2.0 + 150.0,
-                window.height() / 2.0 - 100.0,
-                0.0,
-                Color::srgb(0.8, 0.8, 0.8),
-            ),
-            InventoryUI,
-        ));
+                    font,
+                    &overlay,
+                    -window.width() / 2.0 + 150.0,
+                    window.height() / 2.0 - 100.0,
+                    0.0,
+                    Color::srgb(0.8, 0.8, 0.8),
+                ),
+                InventoryUI,
+            ));
         }
     }
 }
