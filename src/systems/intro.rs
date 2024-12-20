@@ -9,11 +9,11 @@ pub struct IntroText;
 
 #[derive(Bundle, Default)]
 pub struct IntroTextBundle {
-    text: Text2d,
-    text_font: TextFont,
-    text_color: TextColor,
-    transform: Transform,
-    intro: IntroText,
+    pub text: Text2d,
+    pub text_font: TextFont,
+    pub text_color: TextColor,
+    pub transform: Transform,
+    pub intro: IntroText,
 }
 
 pub fn setup_intro(mut commands: Commands, asset_server: Res<AssetServer>) {
