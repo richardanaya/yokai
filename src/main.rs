@@ -1,7 +1,6 @@
 use bevy::{
     input::keyboard::KeyCode,
     prelude::*,
-    text::Text2dBundle,
     window::{PrimaryWindow, WindowResolution},
 };
 mod components;
@@ -26,7 +25,7 @@ fn main() {
             (
                 player_movement,
                 toggle_inventory,
-                render_inventory.run_if(resource_exists::<InventoryState>()),
+                render_inventory.run_if(|state: Option<Res<InventoryState>>| state.is_some()),
             ),
         )
         .run();
@@ -37,7 +36,7 @@ fn spawn_player(
     window_query: Query<&Window, With<PrimaryWindow>>,
     asset_server: Res<AssetServer>,
 ) {
-    let window = window_query.single();
+    let _window = window_query.single();
     // Load the font
     let font = asset_server.load("fonts/NotoSansJP-VariableFont_wght.ttf");
 
@@ -129,7 +128,7 @@ fn setup(
     #[allow(clippy::type_complexity)] mut commands: Commands,
     asset_server: Res<AssetServer>,
     window_query: Query<&Window, With<PrimaryWindow>>,
-    mut game_map: ResMut<GameMap>,
+    _game_map: ResMut<GameMap>,
 ) {
     // Camera
     commands.spawn(Camera2d::default());
