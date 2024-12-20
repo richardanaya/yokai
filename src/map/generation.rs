@@ -1,5 +1,6 @@
 use super::terrain::*;
 use bevy::prelude::*;
+use noise::{NoiseFn, Perlin};
 use rand::Rng;
 use crate::TerrainEntity;
 use crate::create_text_color_bundle;
@@ -23,19 +24,36 @@ pub fn generate_terrain(
 
     let mut rng = rand::thread_rng();
 
+    let perlin = Perlin::new(rng.gen());
+    let scale = 0.1; // Adjust this to change the "zoom level" of the noise
+
     // Create terrain grid
     for row in 0..rows {
         for col in 0..cols {
             let x = start_x + col as f32 * spacing;
             let y = start_y - row as f32 * spacing;
 
-            // Randomly select terrain type
-            let terrain = match rng.gen_range(0..100) {
-                0..=50 => grass(), // 50% chance of grass
-                51..=70 => tree(), // 20% chance of trees
-                71..=85 => rock(), // 15% chance of rocks
-                _ => earth(),      // 15% chance of bare earth
+            // Generate noise value for this position
+            let noise_val = perlin.get([col as f64 * scale, row as f64 * scale]);
+            // Normalize noise from [-1, 1] to [0, 1]
+            let normalized_noise = (noise_val + 1.0) / 2.0;
+
+            // Use noise value to determine terrain type
+            let terrain = match normalized_noise {
+                n if n < 0.3 => earth(),    // Clearings/paths (30%)
+                n if n < 0.6 => grass(),    // Forest floor (30%)
+                n if n < 0.9 => tree(),     // Dense forest (30%)
+                _ => rock(),                // Rocky outcrops (10%)
             };
+
+            // Add some randomness for variation
+            if rng.gen_range(0.0..1.0) < 0.1 {  // 10% chance to override
+                let terrain = match rng.gen_range(0..100) {
+                    0..=50 => grass(),
+                    51..=80 => tree(),
+                    _ => rock(),
+                };
+            }
 
             // Convert terrain to map item
             let map_item = terrain.to_map_item();
