@@ -202,7 +202,7 @@ fn player_movement(
                 collided = true;
                 if let Ok((mut text, mut message)) = message_query.get_single_mut() {
                     message.message = format!("You hit the {}!", monster.name);
-                    text.text = message.message.clone();
+                    text.0 = message.message.clone();
                 }
                 break;
             }
