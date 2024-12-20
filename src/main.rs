@@ -12,6 +12,7 @@ use terrain::*;
 
 fn main() {
     App::new()
+        .add_systems(Startup, setup_audio)
         .add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
                 resizable: false,
@@ -26,7 +27,8 @@ fn main() {
         .add_systems(
             Update,
             handle_intro
-                .run_if(in_state(GameState::Intro))
+                .run_if(in_state(GameState::Intro)),
+            fade_out_intro_music.run_if(in_state(GameState::Playing))
                 .before(bevy::render::camera::camera_system::<OrthographicProjection>),
         )
         .add_systems(
@@ -40,6 +42,16 @@ fn main() {
                 .chain(),
         )
         .run();
+}
+
+fn fade_out_intro_music(
+    mut audio_state: ResMut<AudioState>,
+    mut ran: Local<bool>,
+) {
+    if !*ran {
+        audio_state.fade_out(2.0);
+        *ran = true;
+    }
 }
 
 #[derive(States, Debug, Clone, Copy, Eq, PartialEq, Hash, Default)]
