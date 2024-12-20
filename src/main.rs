@@ -250,21 +250,58 @@ fn setup(
     let start_x = -width / 2.0 + spacing / 2.0;
     let start_y = height / 2.0 - spacing / 2.0;
 
-    // Spawn monster
+    // Spawn monsters
+    // Oni
     commands.spawn((
         create_text_color_bundle(
             font.clone(),
             "鬼",
-            start_x + spacing * 5.0, // 5 spaces right of origin
-            start_y - spacing * 3.0, // 3 spaces down
+            start_x + spacing * 5.0,
+            start_y - spacing * 3.0,
             1.0,
-            Color::srgb(1.0, 0.0, 0.0), // Red color
+            Color::srgb(1.0, 0.0, 0.0),
         ),
         Monster {
             hp: 20,
             max_hp: 20,
             strength: 5,
             name: String::from("Oni"),
+        },
+    ));
+
+    // Goblin
+    commands.spawn((
+        create_text_color_bundle(
+            font.clone(),
+            "G",
+            start_x + spacing * 7.0,
+            start_y - spacing * 3.0,
+            1.0,
+            Color::srgb(0.0, 1.0, 0.0),
+        ),
+        Monster {
+            hp: 10,
+            max_hp: 10,
+            strength: 3,
+            name: String::from("Goblin"),
+        },
+    ));
+
+    // Kappa
+    commands.spawn((
+        create_text_color_bundle(
+            font.clone(),
+            "河",
+            start_x + spacing * 5.0,
+            start_y - spacing * 5.0,
+            1.0,
+            Color::srgb(0.0, 0.0, 1.0),
+        ),
+        Monster {
+            hp: 15,
+            max_hp: 15,
+            strength: 4,
+            name: String::from("Kappa"),
         },
     ));
 
