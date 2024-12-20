@@ -73,13 +73,17 @@ struct InventoryUI;
 #[derive(Component)]
 struct TerrainEntity;
 
+#[derive(Component)]
+struct MainCamera;
+
 fn toggle_inventory(
     keyboard: Res<ButtonInput<KeyCode>>,
     mut query: Query<&mut PlayerStats, With<Player>>,
     mut commands: Commands,
     inventory_ui: Query<Entity, With<InventoryUI>>,
     terrain_entities: Query<Entity, With<TerrainEntity>>,
-    mut player_visibility: Query<&mut Visibility, With<Player>>,
+    mut player_visibility: Query<&mut Visibility, With<Player>>, 
+    camera_query: Query<Entity, With<MainCamera>>,
     asset_server: Res<AssetServer>,
     window_query: Query<&Window, With<PrimaryWindow>>,
 ) {
@@ -115,7 +119,12 @@ fn toggle_inventory(
                 
                 commands.remove_resource::<InventoryState>();
                 
-                // Recreate terrain
+                // Remove existing camera
+                if let Ok(camera_entity) = camera_query.get_single() {
+                    commands.entity(camera_entity).despawn();
+                }
+                
+                // Recreate terrain and camera
                 setup(commands, asset_server, window_query);
             }
         }
@@ -186,7 +195,7 @@ fn setup(
     window_query: Query<&Window, With<PrimaryWindow>>,
 ) {
     // Camera
-    commands.spawn(Camera2d::default());
+    commands.spawn((Camera2d::default(), MainCamera));
 
     // Load the font
     let font = asset_server.load("fonts/NotoSansJP-VariableFont_wght.ttf");
