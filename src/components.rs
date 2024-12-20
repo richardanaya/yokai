@@ -1,5 +1,4 @@
 use bevy::prelude::*;
-use bevy::input::keyboard::KeyCode;
 
 #[derive(Component, Clone)]
 pub struct MapItem {

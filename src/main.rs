@@ -127,7 +127,7 @@ fn setup(
         for col in 0..game_map.width {
             // Create ground layer
             let ground = commands.spawn((
-                GRASS.to_map_item(),
+                grass().to_map_item(),
                 MapPosition { x: col, y: row, z: 0 },
             )).id();
             game_map.add_item(col, row, ground);
@@ -135,13 +135,13 @@ fn setup(
             // Add some random features
             if (col + row) % 7 == 0 {
                 let tree = commands.spawn((
-                    TREE.to_map_item(),
+                    tree().to_map_item(),
                     MapPosition { x: col, y: row, z: 1 },
                 )).id();
                 game_map.add_item(col, row, tree);
             } else if (col + row) % 11 == 0 {
                 let rock = commands.spawn((
-                    ROCK.to_map_item(),
+                    rock().to_map_item(),
                     MapPosition { x: col, y: row, z: 1 },
                 )).id();
                 game_map.add_item(col, row, rock);
