@@ -47,27 +47,119 @@ A roguelike game featuring Japanese yokai (supernatural creatures), using Unicod
   - Mountain (山) - elevation
 
 ## Phase 2: Environmental Systems
-- Time system (day/night cycle)
-- Moon phases system
-  - New Moon
-  - Waxing Crescent
-  - First Quarter
-  - Waxing Gibbous
-  - Full Moon
-  - Waning Gibbous
-  - Last Quarter
-  - Waning Crescent
-- Seasonal system
-  - Spring (桜/花見)
-  - Summer (夏祭り)
-  - Autumn (紅葉)
-  - Winter (雪景色)
-- Weather conditions
-  - Clear (晴れ)
-  - Rain (雨)
-  - Snow (雪)
-  - Fog (霧)
-  - Storm (嵐)
+### Time System
+- Day/Night Cycle Implementation
+  - 24-hour system divided into periods:
+    - 明け方 (Dawn, 4:00-6:59)
+    - 朝 (Morning, 7:00-11:59)
+    - 昼 (Afternoon, 12:00-16:59)
+    - 夕方 (Evening, 17:00-19:59)
+    - 夜 (Night, 20:00-3:59)
+  - Time progression tied to game ticks
+  - Configurable day length
+  - Time-based event system
+
+### Moon Phase System
+- 28-day lunar cycle
+- Moon phases affecting gameplay:
+  - 新月 (New Moon)
+    - Increased yokai activity
+    - Reduced visibility
+  - 三日月 (Waxing Crescent)
+    - Gradual increase in spiritual energy
+  - 上弦の月 (First Quarter)
+    - Balanced supernatural forces
+  - 七日月 (Waxing Gibbous)
+    - Growing yokai powers
+  - 満月 (Full Moon)
+    - Peak of supernatural activity
+    - Special events and transformations
+  - 十三夜 (Waning Gibbous)
+    - Lingering magical effects
+  - 下弦の月 (Last Quarter)
+    - Weakening of barriers between worlds
+  - 二十六夜 (Waning Crescent)
+    - Period of transition
+
+### Seasonal System
+- Four distinct seasons with unique characteristics:
+  - 春 (Spring)
+    - Cherry blossom events (花見)
+    - Rain frequency increased
+    - Specific yokai appearances
+    - Growth and renewal themes
+  - 夏 (Summer)
+    - Festival events (夏祭り)
+    - Increased daylight hours
+    - Heat effects on gameplay
+    - Water-based yokai more active
+  - 秋 (Autumn)
+    - Foliage changes (紅葉)
+    - Harvest moon events
+    - Spirit world closer to material world
+    - Enhanced yokai transformations
+  - 冬 (Winter)
+    - Snow accumulation (雪景色)
+    - Shorter days
+    - Survival challenges
+    - Ice/snow yokai prominence
+
+### Weather System
+- Dynamic weather patterns:
+  - 晴れ (Clear)
+    - Standard visibility
+    - Normal movement speed
+  - 雨 (Rain)
+    - Reduced visibility
+    - Affects fire-based abilities
+    - Empowers water yokai
+  - 雪 (Snow)
+    - Slowed movement
+    - Tracking mechanics
+    - Unique combat modifiers
+  - 霧 (Fog)
+    - Limited visibility range
+    - Stealth advantages
+    - Enhanced yokai spawning
+  - 嵐 (Storm)
+    - Combined effects
+    - Special events
+    - Powerful yokai appearances
+
+### Environmental Interaction System
+- Weather affects:
+  - Movement speed
+  - Combat effectiveness
+  - Visibility range
+  - Yokai behavior and abilities
+- Season influences:
+  - Available resources
+  - Terrain accessibility
+  - Event triggers
+  - Background music and sounds
+- Time of day impacts:
+  - NPC schedules
+  - Shop availability
+  - Yokai spawn rates
+  - Ability effectiveness
+
+### Technical Implementation Details
+- Weather transition system
+  - Gradual changes between states
+  - Particle effects for precipitation
+  - Sound effect management
+- Season progression
+  - Calendar system
+  - Event scheduling
+  - Terrain modification
+- Environmental state machine
+  - Complex state transitions
+  - Event handling
+  - Performance optimization
+- Data structures
+  - Environmental condition tracking
+  - Effect calculation caching
+  - State history management
 
 ## Phase 3: Yokai Implementation
 - Basic yokai types:
