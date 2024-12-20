@@ -23,7 +23,11 @@ fn main() {
         .add_systems(Startup, (setup, spawn_player))
         .add_systems(
             Update,
-            (player_movement, toggle_inventory, render_inventory),
+            (
+                player_movement,
+                toggle_inventory,
+                render_inventory.run_if(resource_exists::<InventoryState>()),
+            ),
         )
         .run();
 }
@@ -64,13 +68,30 @@ fn spawn_player(
     ));
 }
 
+#[derive(Resource)]
+struct InventoryState;
+
 fn toggle_inventory(
     keyboard: Res<ButtonInput<KeyCode>>,
     mut query: Query<&mut PlayerStats, With<Player>>,
+    mut commands: Commands,
+    inventory_state: Option<ResMut<InventoryState>>,
+    inventory_ui: Query<Entity, With<Text2d>>,
 ) {
     if keyboard.just_pressed(KeyCode::KeyI) {
         if let Ok(mut stats) = query.get_single_mut() {
             stats.show_inventory = !stats.show_inventory;
+            
+            // Clean up existing inventory UI
+            for entity in inventory_ui.iter() {
+                commands.entity(entity).despawn();
+            }
+            
+            // Toggle inventory state
+            match inventory_state {
+                Some(_) => commands.remove_resource::<InventoryState>(),
+                None => commands.insert_resource(InventoryState),
+            }
         }
     }
 }
@@ -236,7 +257,7 @@ fn render_inventory(
             commands.spawn(create_text_color_bundle(
                 font,
                 &overlay,
-                -window.width() / 2.0 + 100.0,
+                -window.width() / 2.0 + 150.0,
                 window.height() / 2.0 - 100.0,
                 0.0,
                 Color::srgb(0.8, 0.8, 0.8),
