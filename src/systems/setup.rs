@@ -2,6 +2,8 @@ use crate::{components::*, create_text_color_bundle, TerrainEntity};
 use bevy::{prelude::*, window::PrimaryWindow};
 use crate::map::terrain::TerrainType;
 
+use rand::seq::SliceRandom;
+
 fn find_valid_spawn_position(
     window: &Window,
     char_size: f32,
@@ -9,29 +11,33 @@ fn find_valid_spawn_position(
 ) -> Option<(f32, f32)> {
     let start_x = -window.width() / 2.0 + char_size / 2.0;
     let start_y = window.height() / 2.0 - char_size / 2.0;
+    let mut valid_positions = Vec::new();
 
-    // Try positions until we find one that's not solid
+    // Collect all valid positions
     for row in 0..((window.height() / char_size) as i32) {
         for col in 0..((window.width() / char_size) as i32) {
             let x = start_x + col as f32 * char_size;
             let y = start_y - row as f32 * char_size;
             
             let mut is_valid = true;
-            for (transform, _) in terrain_query.iter() {
+            for (transform, map_item) in terrain_query.iter() {
                 if (transform.translation.x - x).abs() < 1.0 && 
                    (transform.translation.y - y).abs() < 1.0 {
-                    // Found terrain at this position, check if it's solid
-                    is_valid = false;
-                    break;
+                    if map_item.solid {
+                        is_valid = false;
+                        break;
+                    }
                 }
             }
             
             if is_valid {
-                return Some((x, y));
+                valid_positions.push((x, y));
             }
         }
     }
-    None
+
+    // Randomly select one of the valid positions
+    valid_positions.choose(&mut rand::thread_rng()).copied()
 }
 
 pub fn spawn_player(
