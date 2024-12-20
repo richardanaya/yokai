@@ -26,7 +26,6 @@ fn main() {
                 toggle_inventory,
                 render_inventory.run_if(|state: Option<Res<InventoryState>>| state.is_some()),
                 cleanup_dead_monsters,
-                cleanup_inventory_ui,
             ),
         )
         .run();
@@ -124,6 +123,10 @@ fn toggle_inventory(
                 // Setup inventory display
                 setup_inventory_display(&mut commands, &asset_server, &window_query);
             } else {
+                // Clean up inventory UI when toggling off
+                for entity in inventory_ui.iter() {
+                    commands.entity(entity).despawn();
+                }
                 // Show player
                 for mut visibility in player_visibility.iter_mut() {
                     *visibility = Visibility::Inherited;
