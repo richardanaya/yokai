@@ -122,30 +122,24 @@ fn setup(
     let start_x = -width / 2.0 + spacing / 2.0;
     let start_y = height / 2.0 - spacing / 2.0;
 
-    // Create some example terrain
+    use rand::Rng;
+    let mut rng = rand::thread_rng();
+
+    // Create terrain with random distribution
     for row in 0..game_map.height {
         for col in 0..game_map.width {
-            // Create ground layer
-            let ground = commands.spawn((
-                grass().to_map_item(),
+            // Randomly select terrain type
+            let terrain = match rng.gen_range(0..100) {
+                0..=60 => grass(),  // 60% chance of grass
+                61..=80 => tree(),  // 20% chance of trees
+                _ => rock(),        // 20% chance of rocks
+            };
+
+            let item = commands.spawn((
+                terrain.to_map_item(),
                 MapPosition { x: col, y: row, z: 0 },
             )).id();
-            game_map.add_item(col, row, ground);
-
-            // Add some random features
-            if (col + row) % 7 == 0 {
-                let tree = commands.spawn((
-                    tree().to_map_item(),
-                    MapPosition { x: col, y: row, z: 1 },
-                )).id();
-                game_map.add_item(col, row, tree);
-            } else if (col + row) % 11 == 0 {
-                let rock = commands.spawn((
-                    rock().to_map_item(),
-                    MapPosition { x: col, y: row, z: 1 },
-                )).id();
-                game_map.add_item(col, row, rock);
-            }
+            game_map.add_item(col, row, item);
         }
     }
 
