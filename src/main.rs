@@ -25,7 +25,12 @@ fn main() {
         .init_state::<GameState>()
         .add_systems(Startup, setup_intro)
         .add_systems(OnEnter(GameState::Playing), (setup, spawn_player))
-        .add_systems(Update, handle_intro.run_if(in_state(GameState::Intro)))
+        .add_systems(
+            Update,
+            handle_intro
+                .run_if(in_state(GameState::Intro))
+                .before(bevy::render::camera::camera_system),
+        )
         .add_systems(
             Update,
             (
