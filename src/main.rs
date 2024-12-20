@@ -1,7 +1,6 @@
 use bevy::{
     prelude::*,
     window::{PrimaryWindow, WindowResolution},
-    render::color::Color,
 };
 mod components;
 mod map;

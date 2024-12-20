@@ -48,7 +48,7 @@ pub fn generate_terrain(
 
             // Add some randomness for variation
             if rng.gen_range(0.0..1.0) < 0.1 {  // 10% chance to override
-                let terrain = match rng.gen_range(0..100) {
+                let _terrain = match rng.gen_range(0..100) {
                     0..=50 => grass(),
                     51..=80 => tree(),
                     _ => rock(),
