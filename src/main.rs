@@ -171,6 +171,8 @@ fn setup_inventory_display(
 fn player_movement(
     keyboard: Res<ButtonInput<KeyCode>>,
     mut player_query: Query<&mut Transform, With<Player>>,
+    mut monster_query: Query<(&Transform, &Monster)>,
+    mut message_query: Query<(&mut Text2d, &mut CombatMessage)>,
 ) {
     let grid_size = 12.0;
     let mut delta = Vec2::ZERO;
@@ -189,9 +191,27 @@ fn player_movement(
     }
 
     if delta != Vec2::ZERO {
-        for mut transform in player_query.iter_mut() {
-            transform.translation.x += delta.x;
-            transform.translation.y += delta.y;
+        let player_pos = player_query.single().translation.clone();
+        let new_pos = Vec3::new(player_pos.x + delta.x, player_pos.y + delta.y, player_pos.z);
+
+        // Check for monster collision
+        let mut collided = false;
+        for (monster_transform, monster) in monster_query.iter() {
+            if (monster_transform.translation.x - new_pos.x).abs() < 1.0 
+               && (monster_transform.translation.y - new_pos.y).abs() < 1.0 {
+                collided = true;
+                if let Ok((mut text, mut message)) = message_query.get_single_mut() {
+                    message.message = format!("You hit the {}!", monster.name);
+                    text.text = message.message.clone();
+                }
+                break;
+            }
+        }
+
+        if !collided {
+            for mut transform in player_query.iter_mut() {
+                transform.translation = new_pos;
+            }
         }
     }
 }
@@ -234,6 +254,22 @@ fn setup(
             hp: 20,
             max_hp: 20,
             strength: 5,
+            name: String::from("Oni"),
+        },
+    ));
+
+    // Spawn combat message bar
+    commands.spawn((
+        create_text_color_bundle(
+            font.clone(),
+            "",
+            -width / 2.0 + 10.0,  // Left edge + small margin
+            height / 2.0 - 20.0,   // Top edge - small margin
+            2.0,
+            Color::srgb(0.8, 0.8, 0.8),
+        ),
+        CombatMessage {
+            message: String::new(),
         },
     ));
     let char_size = 12.0;

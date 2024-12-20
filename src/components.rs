@@ -78,5 +78,11 @@ pub struct Monster {
     pub hp: u32,
     pub max_hp: u32,
     pub strength: u32,
+    pub name: String,
+}
+
+#[derive(Component)]
+pub struct CombatMessage {
+    pub message: String,
 }
 
