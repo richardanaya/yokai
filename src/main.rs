@@ -42,6 +42,7 @@ fn spawn_player(
     // Spawn player body
     commands.spawn((
         create_text_color_bundle(font.clone(), "@", 0.0, 0.0, 1.0, Color::srgb(0.8, 0.8, 0.8)),
+        Visibility::default(),
         Player,
         PlayerBody,
         PlayerStats::default(),
@@ -57,6 +58,7 @@ fn spawn_player(
             1.0,
             Color::srgb(0.8, 0.8, 0.8),
         ),
+        Visibility::default(),
         Player,
         PlayerWeapon,
     ));
@@ -74,6 +76,7 @@ fn toggle_inventory(
     mut commands: Commands,
     inventory_state: Option<ResMut<InventoryState>>,
     inventory_ui: Query<Entity, With<InventoryUI>>,
+    mut player_visibility: Query<&mut Visibility, With<Player>>,
 ) {
     if keyboard.just_pressed(KeyCode::KeyI) {
         if let Ok(mut stats) = query.get_single_mut() {
@@ -84,10 +87,16 @@ fn toggle_inventory(
                 commands.entity(entity).despawn();
             }
             
+            // Toggle player visibility
+            for mut visibility in player_visibility.iter_mut() {
+                visibility.is_visible = !stats.show_inventory;
+            }
+            
             // Toggle inventory state
-            match inventory_state {
-                Some(_) => commands.remove_resource::<InventoryState>(),
-                None => commands.insert_resource(InventoryState),
+            if stats.show_inventory {
+                commands.insert_resource(InventoryState);
+            } else {
+                commands.remove_resource::<InventoryState>();
             }
         }
     }
