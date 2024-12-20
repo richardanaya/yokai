@@ -26,6 +26,7 @@ fn main() {
                 toggle_inventory,
                 render_inventory.run_if(|state: Option<Res<InventoryState>>| state.is_some()),
                 cleanup_dead_monsters,
+                cleanup_inventory_ui,
             ),
         )
         .run();
@@ -96,7 +97,6 @@ fn toggle_inventory(
     keyboard: Res<ButtonInput<KeyCode>>,
     mut query: Query<&mut PlayerStats, With<Player>>,
     mut commands: Commands,
-    inventory_ui: Query<Entity, With<InventoryUI>>,
     terrain_entities: Query<Entity, With<TerrainEntity>>,
     mut player_visibility: Query<&mut Visibility, With<Player>>,
     camera_query: Query<Entity, With<MainCamera>>,
@@ -107,10 +107,6 @@ fn toggle_inventory(
         if let Ok(mut stats) = query.get_single_mut() {
             stats.show_inventory = !stats.show_inventory;
 
-            // Clean up existing UI elements
-            for entity in inventory_ui.iter() {
-                commands.entity(entity).despawn();
-            }
 
             if stats.show_inventory {
                 // Hide terrain when showing inventory
@@ -400,6 +396,15 @@ fn create_text_color_bundle(
         Transform::from_xyz(x, y, z),
         TextColor::from(color),
     );
+}
+
+fn cleanup_inventory_ui(
+    mut commands: Commands,
+    inventory_ui: Query<Entity, With<InventoryUI>>,
+) {
+    for entity in inventory_ui.iter() {
+        commands.entity(entity).despawn();
+    }
 }
 
 fn cleanup_dead_monsters(
