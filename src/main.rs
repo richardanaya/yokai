@@ -18,7 +18,6 @@ fn main() {
             }),
             ..default()
         }))
-        .insert_resource(GameMap::new(100, 100)) // Create a 100x100 map
         .add_systems(Startup, (setup, spawn_player))
         .add_systems(
             Update,
@@ -121,10 +120,9 @@ fn player_movement(
 }
 
 fn setup(
-    #[allow(clippy::type_complexity)] mut commands: Commands,
+    mut commands: Commands,
     asset_server: Res<AssetServer>,
     window_query: Query<&Window, With<PrimaryWindow>>,
-    _game_map: ResMut<GameMap>,
 ) {
     // Camera
     commands.spawn(Camera2d::default());
@@ -179,11 +177,6 @@ fn setup(
                     map_item.current_color(),
                 ),
                 map_item,
-                MapPosition {
-                    x: col as i32,
-                    y: row as i32,
-                    z: 0,
-                },
             ));
         }
     }
