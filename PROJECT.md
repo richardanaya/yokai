@@ -162,28 +162,216 @@ A roguelike game featuring Japanese yokai (supernatural creatures), using Unicod
   - State history management
 
 ## Phase 3: Yokai Implementation
-- Basic yokai types:
-  - Kappa (河童) - water-dwelling creature
-  - Tengu (天狗) - mountain spirit
-  - Kitsune (狐) - fox spirit
-  - Oni (鬼) - demon
-  - Yurei (幽霊) - ghost
-- Yokai behaviors tied to environmental conditions
-  - Different yokai active during different moon phases
-  - Seasonal yokai appearances
-  - Weather-specific behaviors
+### Core Yokai System
+- Base Yokai trait implementation
+  - Common attributes (力/strength, 知/wisdom, 速/speed)
+  - Elemental alignments (五行/five elements)
+  - Transformation capabilities (変化)
+  - Territory system (縄張り)
+  - Reputation tracking (評判)
+
+### Yokai Categories
+- Water Yokai (水妖)
+  - Kappa (河童)
+    - Swimming ability
+    - Water combat bonus
+    - Cucumber-based interactions
+  - Ningyo (人魚)
+    - Song abilities
+    - Weather prediction
+  - Umibōzu (海坊主)
+    - Storm manipulation
+    - Ship interactions
+
+- Mountain Yokai (山妖)
+  - Tengu (天狗)
+    - Flight capability
+    - Wind manipulation
+    - Combat training system
+  - Yamabiko (山彦)
+    - Echo abilities
+    - Territory marking
+  - Yamauba (山姥)
+    - Seasonal power shifts
+    - Resource gathering
+
+- Forest Yokai (森妖)
+  - Kitsune (狐)
+    - Multiple tails system
+    - Illusion powers
+    - Fire manipulation
+  - Kodama (木霊)
+    - Tree communication
+    - Forest blessing/curse
+  - Tanuki (狸)
+    - Transformation mastery
+    - Luck manipulation
+
+- Spirit Yokai (霊妖)
+  - Yurei (幽霊)
+    - Phasing abilities
+    - Emotional influence
+    - Unfinished business quests
+  - Onryō (怨霊)
+    - Curse mechanics
+    - Vengeance system
+  - Zashiki-warashi (座敷童)
+    - Luck manipulation
+    - House protection
+
+### Yokai Interaction System
+- Relationship Mechanics
+  - Allegiance system (友好度)
+  - Territory respect (縄張り認識)
+  - Power hierarchy (妖力位階)
+  - Gift giving mechanics (贈物)
+
+- Behavioral Patterns
+  - Time-based activities
+    - Dawn/dusk preferences
+    - Seasonal migrations
+    - Festival participation
+  - Weather reactions
+    - Rain empowerment
+    - Storm sheltering
+    - Snow tracking
+  - Moon phase behaviors
+    - Power fluctuations
+    - Transformation triggers
+    - Activity cycles
+
+### Combat System
+- Attack Types
+  - Physical (物理)
+  - Magical (妖術)
+  - Status Effects (状態変化)
+  - Environmental (自然力)
+
+- Combat Mechanics
+  - Initiative based on time/weather
+  - Terrain advantages
+  - Elemental interactions
+  - Formation systems
+
+### Technical Implementation
+- AI State Machine
+  - Behavior trees
+  - Decision making
+  - Path finding
+  - Territory management
+
+- Data Structures
+  - Yokai attributes
+  - Relationship tracking
+  - Event history
+  - Power scaling
+
+- Performance Optimization
+  - LOD system for AI
+  - Behavior caching
+  - Territory chunking
+  - Event scheduling
 
 ## Phase 4: Dynamic Visuals
-- Color system based on:
-  - Time of day (朝/昼/夕/夜)
-  - Season
-  - Weather
-  - Moon phase
-- Unicode character selection for:
-  - Terrain features (山川草木)
-  - Items (宝具)
-  - Creatures (妖怪)
-  - Effects (術法)
+### Color Management System
+- Environmental Color Schemes
+  - Time-based Palettes
+    - 朝 (Morning): Soft, warm colors
+    - 昼 (Day): Bright, clear colors
+    - 夕 (Evening): Rich, golden hues
+    - 夜 (Night): Deep, cool tones
+  
+  - Seasonal Color Sets
+    - 春 (Spring): Pink, green pastels
+    - 夏 (Summer): Vibrant, saturated
+    - 秋 (Autumn): Red, orange, brown
+    - 冬 (Winter): White, blue, gray
+    
+  - Weather-based Modifications
+    - Clear: Standard colors
+    - Rain: Muted, blue shift
+    - Snow: High contrast, white
+    - Fog: Desaturated, blur effect
+    
+  - Moon Phase Influences
+    - New Moon: Dark, limited palette
+    - Full Moon: Enhanced contrast
+    - Transitional: Subtle shifts
+
+### Unicode Character System
+- Terrain Visualization (地形)
+  - Elevation Markers
+    - 山 (Mountains)
+    - 丘 (Hills)
+    - 谷 (Valleys)
+  - Water Features
+    - 川 (Rivers)
+    - 池 (Ponds)
+    - 海 (Ocean)
+  - Vegetation
+    - 木 (Trees)
+    - 草 (Grass)
+    - 花 (Flowers)
+
+- Entity Representation
+  - Player Characters (主人公)
+    - Status indicators
+    - Equipment display
+    - Direction markers
+  - Yokai Forms (妖怪)
+    - Transformation states
+    - Power indicators
+    - Mood signifiers
+
+- Effect Visualization (効果)
+  - Magic Systems (術法)
+    - Spell patterns
+    - Energy flows
+    - Barrier marks
+  - Status Effects (状態)
+    - Buffs/Debuffs
+    - Ailments
+    - Blessings
+
+### Animation Framework
+- Transition Systems
+  - Character Movement
+    - Walking patterns
+    - Running sequences
+    - Special movements
+  - Environmental Changes
+    - Weather transitions
+    - Time progression
+    - Seasonal shifts
+
+- Particle Effects
+  - Natural Elements
+    - Rain/Snow patterns
+    - Wind indicators
+    - Fire effects
+  - Magical Effects
+    - Spell casting
+    - Transformation
+    - Spiritual energy
+
+### Technical Implementation
+- Rendering Pipeline
+  - Double buffering
+  - Character composition
+  - Color blending
+  - Animation timing
+
+- Performance Optimization
+  - Viewport culling
+  - Animation caching
+  - Color calculation
+  - Character lookup
+
+- Accessibility Features
+  - High contrast mode
+  - Simple character mode
+  - Animation reduction
+  - Color blind support
 
 ## Phase 5: Advanced Features
 - Yokai interaction system
