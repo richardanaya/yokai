@@ -1,6 +1,7 @@
 use bevy::{
     prelude::*,
     window::{PrimaryWindow, WindowResolution},
+    input::keyboard::KeyboardInput,
 };
 mod components;
 mod systems;
@@ -20,7 +21,10 @@ fn main() {
             }),
             ..default()
         }))
-        .add_systems(Startup, (setup, spawn_player).chain())
+        .add_state::<GameState>()
+        .add_systems(Startup, setup_intro)
+        .add_systems(OnEnter(GameState::Playing), (setup, spawn_player))
+        .add_systems(Update, handle_intro.run_if(in_state(GameState::Intro)))
         .add_systems(
             Update,
             (
@@ -32,6 +36,13 @@ fn main() {
                 .chain(),
         )
         .run();
+}
+
+#[derive(States, Debug, Clone, Copy, Eq, PartialEq, Hash, Default)]
+pub enum GameState {
+    #[default]
+    Intro,
+    Playing,
 }
 
 #[derive(Resource)]
@@ -210,3 +221,63 @@ fn create_text_color_bundle(
         TextColor::from(color),
     );
 }
+fn setup_intro(mut commands: Commands, asset_server: Res<AssetServer>) {
+    // Camera
+    commands.spawn(Camera2d::default());
+
+    // Load the font
+    let font = asset_server.load("fonts/NotoSansJP-VariableFont_wght.ttf");
+
+    // Spawn title text
+    commands.spawn((
+        Text2dBundle {
+            text: Text::from_section(
+                "妖怪",
+                TextStyle {
+                    font: font.clone(),
+                    font_size: 60.0,
+                    color: Color::WHITE,
+                },
+            ),
+            transform: Transform::from_xyz(0.0, 50.0, 0.0),
+            ..default()
+        },
+        IntroText,
+    ));
+
+    // Spawn "Press any key" text
+    commands.spawn((
+        Text2dBundle {
+            text: Text::from_section(
+                "Press any key to start",
+                TextStyle {
+                    font,
+                    font_size: 20.0,
+                    color: Color::GRAY,
+                },
+            ),
+            transform: Transform::from_xyz(0.0, -50.0, 0.0),
+            ..default()
+        },
+        IntroText,
+    ));
+}
+
+fn handle_intro(
+    mut next_state: ResMut<NextState<GameState>>,
+    mut keyboard_events: EventReader<KeyboardInput>,
+    mut commands: Commands,
+    intro_text: Query<Entity, With<IntroText>>,
+) {
+    for _ in keyboard_events.read() {
+        // Clean up intro text
+        for entity in intro_text.iter() {
+            commands.entity(entity).despawn();
+        }
+        next_state.set(GameState::Playing);
+        break;
+    }
+}
+
+#[derive(Component)]
+struct IntroText;
