@@ -70,38 +70,83 @@ struct InventoryState;
 #[derive(Component)]
 struct InventoryUI;
 
+#[derive(Component)]
+struct TerrainEntity;
+
 fn toggle_inventory(
     keyboard: Res<ButtonInput<KeyCode>>,
     mut query: Query<&mut PlayerStats, With<Player>>,
     mut commands: Commands,
-    inventory_state: Option<ResMut<InventoryState>>,
     inventory_ui: Query<Entity, With<InventoryUI>>,
+    terrain_entities: Query<Entity, With<TerrainEntity>>,
     mut player_visibility: Query<&mut Visibility, With<Player>>,
+    asset_server: Res<AssetServer>,
+    window_query: Query<&Window, With<PrimaryWindow>>,
 ) {
     if keyboard.just_pressed(KeyCode::KeyI) {
         if let Ok(mut stats) = query.get_single_mut() {
             stats.show_inventory = !stats.show_inventory;
             
-            // Clean up existing inventory UI
+            // Clean up existing UI elements
             for entity in inventory_ui.iter() {
                 commands.entity(entity).despawn();
             }
             
-            // Toggle player visibility
-            for mut visibility in player_visibility.iter_mut() {
-                *visibility = if stats.show_inventory {
-                    Visibility::Hidden
-                } else {
-                    Visibility::Inherited
-                };
-            }
-            
-            // Toggle inventory state
             if stats.show_inventory {
+                // Hide terrain when showing inventory
+                for entity in terrain_entities.iter() {
+                    commands.entity(entity).despawn();
+                }
+                
+                // Hide player
+                for mut visibility in player_visibility.iter_mut() {
+                    *visibility = Visibility::Hidden;
+                }
+                
                 commands.insert_resource(InventoryState);
+                
+                // Setup inventory display
+                setup_inventory_display(&mut commands, &asset_server, &window_query);
             } else {
+                // Show player
+                for mut visibility in player_visibility.iter_mut() {
+                    *visibility = Visibility::Inherited;
+                }
+                
                 commands.remove_resource::<InventoryState>();
+                
+                // Recreate terrain
+                setup(&mut commands, asset_server, window_query);
             }
+        }
+    }
+}
+
+fn setup_inventory_display(
+    commands: &mut Commands,
+    asset_server: &Res<AssetServer>,
+    window_query: &Query<&Window, With<PrimaryWindow>>,
+) {
+    let window = window_query.single();
+    let font = asset_server.load("fonts/NotoSansJP-VariableFont_wght.ttf");
+    
+    // Create a dark background for the inventory
+    for row in 0..50 {
+        for col in 0..100 {
+            let x = -window.width() / 2.0 + col as f32 * 12.0;
+            let y = window.height() / 2.0 - row as f32 * 12.0;
+            
+            commands.spawn((
+                create_text_color_bundle(
+                    font.clone(),
+                    ".",
+                    x,
+                    y,
+                    0.0,
+                    Color::srgb(0.1, 0.1, 0.1),
+                ),
+                InventoryUI,
+            ));
         }
     }
 }
@@ -193,7 +238,7 @@ fn setup(
                     map_item.current_color(),
                 ),
                 map_item,
-                InventoryUI,
+                TerrainEntity,
             ));
         }
     }
