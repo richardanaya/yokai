@@ -12,13 +12,14 @@ fn setup(mut commands: Commands) {
     commands.spawn(Camera2dBundle::default());
 
     // Text
+    // Load the font
+    let font = asset_server.load("fonts/NotoSansJP-Regular.otf");
+    
     commands.spawn(Text2dBundle {
         text: Text::from_section(
             "妖",
             TextStyle {
-                // On macOS, use a system Japanese font
-                font: Font::try_from_system_path("/System/Library/Fonts/ヒラギノ角ゴシック W3.ttc")
-                    .expect("Failed to load system font"),
+                font,
                 font_size: 60.0,
                 color: Color::WHITE,
             },
