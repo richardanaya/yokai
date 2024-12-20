@@ -26,10 +26,10 @@ fn main() {
         .add_systems(OnEnter(GameState::Playing), (setup, spawn_player))
         .add_systems(
             Update,
-            handle_intro
-                .run_if(in_state(GameState::Intro)),
-            fade_out_intro_music.run_if(in_state(GameState::Playing))
-                .before(bevy::render::camera::camera_system::<OrthographicProjection>),
+            (
+                handle_intro.run_if(in_state(GameState::Intro)),
+                fade_out_intro_music.run_if(in_state(GameState::Playing))
+            )
         )
         .add_systems(
             Update,
@@ -45,7 +45,7 @@ fn main() {
 }
 
 fn fade_out_intro_music(
-    mut audio_state: ResMut<AudioState>,
+    audio_state: Res<AudioState>,
     mut ran: Local<bool>,
 ) {
     if !*ran {
