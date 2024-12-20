@@ -273,7 +273,7 @@ fn setup(
             font.clone(),
             "",
             -width / 2.0 + 10.0,  // Left edge + small margin
-            height / 2.0 - 20.0,   // Top edge - small margin
+            -height / 2.0 + 20.0,   // Bottom edge + small margin
             2.0,
             Color::srgb(0.8, 0.8, 0.8),
         ),
