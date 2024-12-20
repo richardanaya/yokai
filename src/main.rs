@@ -180,7 +180,6 @@ fn setup(
                     map_item.current_color(),
                 ),
                 map_item,
-                ),
                 InventoryUI,
             ));
         }
@@ -255,7 +254,9 @@ fn render_inventory(
                 window.height() / 2.0 - 100.0,
                 0.0,
                 Color::srgb(0.8, 0.8, 0.8),
-            ));
+            ),
+            InventoryUI,
+        ));
         }
     }
 }
