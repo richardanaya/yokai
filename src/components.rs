@@ -68,16 +68,16 @@ impl Default for PlayerStats {
 }
 
 #[derive(Component)]
-pub struct PlayerBody {
-    pub character: String,
-}
+#[derive(Component)]
+pub struct PlayerBody;
 
 #[derive(Component)]
-pub struct PlayerWeapon {
-    pub character: String,
-}
+#[derive(Component)]
+pub struct PlayerWeapon;
 
 #[derive(Component)]
+#[derive(Component)]
+#[allow(dead_code)]
 pub struct MapPosition {
     pub x: i32,
     pub y: i32,
@@ -85,6 +85,8 @@ pub struct MapPosition {
 }
 
 #[derive(Resource)]
+#[derive(Resource)]
+#[allow(dead_code)]
 pub struct GameMap {
     pub width: i32,
     pub height: i32,

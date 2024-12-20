@@ -44,9 +44,7 @@ fn spawn_player(
     commands.spawn((
         create_text_color_bundle(font.clone(), "@", 0.0, 0.0, 1.0, Color::srgb(0.8, 0.8, 0.8)),
         Player,
-        PlayerBody {
-            character: "@".to_string(),
-        },
+        PlayerBody,
         PlayerStats::default(),
     ));
 
@@ -61,9 +59,7 @@ fn spawn_player(
             Color::srgb(0.8, 0.8, 0.8),
         ),
         Player,
-        PlayerWeapon {
-            character: "/".to_string(),
-        },
+        PlayerWeapon,
     ));
 }
 
