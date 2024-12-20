@@ -1,5 +1,12 @@
-use bevy::prelude::*;
-use crate::components::*;
+use bevy::{prelude::*, window::PrimaryWindow};
+use crate::{
+    components::*,
+    TerrainEntity,
+    MainCamera,
+    InventoryUI,
+    InventoryState,
+    create_text_color_bundle,
+};
 
 pub fn toggle_inventory(
     keyboard: Res<ButtonInput<KeyCode>>,

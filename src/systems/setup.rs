@@ -1,5 +1,5 @@
-use bevy::prelude::*;
-use crate::components::*;
+use bevy::{prelude::*, window::PrimaryWindow};
+use crate::{components::*, TerrainEntity, MainCamera, create_text_color_bundle};
 use rand::Rng;
 
 pub fn setup(

@@ -1,5 +1,4 @@
 use bevy::{
-    input::keyboard::KeyCode,
     prelude::*,
     window::{PrimaryWindow, WindowResolution},
 };
@@ -21,7 +20,7 @@ fn main() {
             }),
             ..default()
         }))
-        .add_systems(Startup, (setup, spawn_player))
+        .add_systems(Startup, (setup, spawn_player).chain())
         .add_systems(
             Update,
             (
@@ -29,25 +28,24 @@ fn main() {
                 toggle_inventory,
                 render_inventory.run_if(|state: Option<Res<InventoryState>>| state.is_some()),
                 cleanup_dead_monsters,
-            ),
+            ).chain(),
         )
         .run();
 }
 
-
 #[derive(Resource)]
-struct InventoryState {
-    needs_update: bool,
+pub struct InventoryState {
+    pub needs_update: bool,
 }
 
 #[derive(Component)]
-struct InventoryUI;
+pub struct InventoryUI;
 
 #[derive(Component)]
-struct TerrainEntity;
+pub struct TerrainEntity;
 
 #[derive(Component)]
-struct MainCamera;
+pub struct MainCamera;
 
 
 
